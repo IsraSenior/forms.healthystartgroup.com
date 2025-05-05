@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@import "@nuxt/ui";
+
+@theme static {
+    --font-sans: 'Poppins', sans-serif;
+
+    --breakpoint-3xl: 1920px;
+
+    --color-primary: #0eaa95;
+    --color-primary-50: #f0fdfa;
+    --color-primary-100: #cbfcf1;
+    --color-primary-200: #96f9e4;
+    --color-primary-300: #5aeed3;
+    --color-primary-400: #28d9be;
+    --color-primary-500: #099887;
+    --color-primary-600: #0c796d;
+    --color-primary-700: #0f6059;
+    --color-primary-800: #115049;
+    --color-primary-900: #03302e;
+
+    --color-secondary: #002d74;
+    --color-secondary-50: #e9f8ff;
+    --color-secondary-100: #cef0ff;
+    --color-secondary-200: #a7e6ff;
+    --color-secondary-300: #6bdaff;
+    --color-secondary-400: #26c1ff;
+    --color-secondary-500: #0099ff;
+    --color-secondary-600: #006fff;
+    --color-secondary-700: #0054ff;
+    --color-secondary-800: #0047e6;
+    --color-secondary-900: #0042b3;
+}
+
+.page {
+    @apply h-[calc(8.3in)] w-[11.7in] px-12 overflow-hidden relative;
+
+    & .page-container {
+        @apply w-full h-full;
+    }
+}
