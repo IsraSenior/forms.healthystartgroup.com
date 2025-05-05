@@ -26,7 +26,9 @@ const formData = reactive({
     date_started: new Date().toISOString(),
     answers: {}
 });
+
 const currentStep = ref(0);
+const start = ref(false)
 const evidenceID = ref(null)
 const submitting = ref(false)
 
@@ -127,7 +129,20 @@ const disabled = computed(() => {
         <div class="relative w-full">
             <div class="max-w-3xl mt-32 w-full mx-auto grid gap-8 py-8 bg-white z-10 relative px-5 rounded-3xl">
                 <UForm v-auto-animate :state="formData.answers" @submit="onSubmit">
-                    <template v-if="!evidenceID">
+
+                    <template v-if="!start">
+                        <div class="flex justify-center flex-col items-center">
+                            <h4 class="text-2xl md:text-3xl font-bold text-center text-secondary mb-8">Permission to
+                                Contact</h4>
+
+                            <p class="text-center max-w-xl mx-auto mb-8">We can help you find a policy that’s right for you. Fill out this short form so a
+                                licensed agent from HealthyStart Group can contact you.</p>
+
+                            <UButton size="xl" target="_blank" @click.prevent="start = !start">Start now</UButton>
+                        </div>
+                    </template>
+
+                    <template v-if="!evidenceID && start">
                         <template v-for="(field, fieldInx) in form?.fields" :key="field?.id">
                             <template v-if="currentStep === fieldInx">
                                 <template v-if="['input', 'tel', 'email', 'textarea'].includes(field?.type)">
@@ -173,7 +188,7 @@ const disabled = computed(() => {
                         </template>
                     </template>
 
-                    <template v-else>
+                    <template v-if="evidenceID && start">
                         <div class="flex justify-center flex-col items-center">
                             <h4 class="text-2xl md:text-3xl font-bold text-center text-secondary mb-8">Thank you for
                                 successfully <br class="hidden md:block"> submitting the form</h4>
@@ -185,7 +200,7 @@ const disabled = computed(() => {
                         </div>
                     </template>
 
-                    <div v-if="!evidenceID" class="flex justify-between gap-8 mt-8">
+                    <div v-if="!evidenceID && start" class="flex justify-between gap-8 mt-8">
                         <UButton v-if="currentStep > 0" @click="currentStep--" color="secondary" :disabled="submitting"
                             size="xl">
                             Back
