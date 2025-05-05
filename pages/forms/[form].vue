@@ -5,7 +5,7 @@ const route = useRoute();
 const { data: form } = await useAsyncData('form', () => {
     return $directus.request($readItem('forms', route.params.form, {
         fields: ['id', 'title', 'description', {
-            fields: ['id', 'type', 'label', 'placeholder', 'required', 'options'],
+            fields: ['id', 'type', 'label', 'placeholder', 'Note', 'required', 'options'],
         }],
     }));
 });
@@ -127,18 +127,22 @@ const disabled = computed(() => {
         </div>
 
         <div class="relative w-full">
-            <div class="max-w-3xl mt-32 w-full mx-auto grid gap-8 py-8 bg-white z-10 relative px-5 rounded-3xl">
+            <div class="max-w-[42rem] mt-32 w-full mx-auto grid gap-8 py-8 bg-white z-10 relative px-5 rounded-3xl">
                 <UForm v-auto-animate :state="formData.answers" @submit="onSubmit">
 
                     <template v-if="!start">
                         <div class="flex justify-center flex-col items-center">
-                            <h4 class="text-2xl md:text-3xl font-bold text-center text-secondary mb-8">Permission to
-                                Contact</h4>
+                            <h4 class="text-2xl md:text-3xl font-bold text-center text-secondary mb-8">
+                                {{ form?.title }}
+                            </h4>
 
-                            <p class="text-center max-w-xl mx-auto mb-8">We can help you find a policy that’s right for you. Fill out this short form so a
-                                licensed agent from HealthyStart Group can contact you.</p>
+                            <p class="text-center max-w-xl mx-auto mb-8">
+                                {{ form?.description }}
+                            </p>
 
-                            <UButton size="xl" target="_blank" @click.prevent="start = !start">Start now</UButton>
+                            <UButton size="xl" target="_blank" @click.prevent="start = !start">
+                                Start now
+                            </UButton>
                         </div>
                     </template>
 
@@ -170,11 +174,14 @@ const disabled = computed(() => {
                                     </UFormField>
                                 </template>
 
-                                <template v-if="['toggle'].includes(field?.type)">
+                                <template v-if="['toggle'].includes(field?.type)" >
+                                    <h4 class="text-lg md:text-xl font-bold text-center text-secondary mb-8">{{
+                                        field?.Note }}
+                                    </h4>
                                     <UFormField :name="field?.id" :required="field?.required">
                                         <component class="w-full" size="xl" :is="fieldsMap[field?.type]"
                                             v-model="formData.answers[field.id]" :items="field?.options"
-                                            :label="field?.label" />
+                                            :label="field?.label" variant="card" />
                                     </UFormField>
                                 </template>
 
