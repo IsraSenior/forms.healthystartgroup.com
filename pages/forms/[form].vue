@@ -165,9 +165,9 @@ const disabled = computed(() => {
                                         field?.label }}
                                     </h4>
                                     <UFormField :name="field?.id" :required="field?.required">
-                                        <component class="w-full flex justify-center" size="xl" :is="fieldsMap[field?.type]"
-                                            v-model="formData.answers[field.id]" :items="field?.options"
-                                            :placeholder="field?.placeholder" 
+                                        <component class="w-full flex justify-center" size="xl"
+                                            :is="fieldsMap[field?.type]" v-model="formData.answers[field.id]"
+                                            :items="field?.options" :placeholder="field?.placeholder"
                                             orientation="horizontal" indicator="end" variant="card" />
                                     </UFormField>
                                 </template>
@@ -184,7 +184,7 @@ const disabled = computed(() => {
                                     </UFormField>
                                 </template>
 
-                                <template v-if="['toggle'].includes(field?.type)" >
+                                <template v-if="['toggle'].includes(field?.type)">
                                     <h4 class="text-lg md:text-xl font-bold text-center text-secondary mb-8">{{
                                         field?.Note }}
                                     </h4>
@@ -210,10 +210,14 @@ const disabled = computed(() => {
                             <h4 class="text-2xl md:text-3xl font-bold text-center text-secondary mb-8">Thank you for
                                 successfully <br class="hidden md:block"> submitting the form</h4>
 
-                            <UButton size="xl" target="_blank"
-                                :href="`https://admin.healthystartgroup.com/assets/${evidenceID}`" download>Download
-                                your
-                                evidence</UButton>
+                            <div class="flex items-center justify-center space-x-8">
+                                <UButton size="xl" target="_blank"
+                                    :href="`https://admin.healthystartgroup.com/assets/${evidenceID}`" download>Download
+                                    your
+                                    evidence</UButton>
+
+                                <ULink :href="`/forms/${route.params.form}`" target="_parent">Submit again</ULink>
+                            </div>
                         </div>
                     </template>
 
