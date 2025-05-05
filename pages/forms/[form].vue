@@ -150,7 +150,10 @@ const disabled = computed(() => {
                         <template v-for="(field, fieldInx) in form?.fields" :key="field?.id">
                             <template v-if="currentStep === fieldInx">
                                 <template v-if="['input', 'tel', 'email', 'textarea'].includes(field?.type)">
-                                    <UFormField :label="field?.label" :name="field?.id" :required="field?.required">
+                                    <h4 class="text-lg md:text-xl font-bold text-center text-secondary mb-8">{{
+                                        field?.label }}
+                                    </h4>
+                                    <UFormField :name="field?.id" :required="field?.required">
                                         <component class="w-full" size="xl" :is="fieldsMap[field?.type]"
                                             :type="field?.type" :placeholder="field?.placeholder"
                                             v-model="formData.answers[field.id]" />
@@ -158,19 +161,26 @@ const disabled = computed(() => {
                                 </template>
 
                                 <template v-if="['checkbox', 'radio'].includes(field?.type)">
-                                    <UFormField :label="field?.label" :name="field?.id" :required="field?.required">
-                                        <component class="w-full" size="xl" :is="fieldsMap[field?.type]"
+                                    <h4 class="text-lg md:text-xl font-bold text-center text-secondary mb-8">{{
+                                        field?.label }}
+                                    </h4>
+                                    <UFormField :name="field?.id" :required="field?.required">
+                                        <component class="w-full flex justify-center" size="xl" :is="fieldsMap[field?.type]"
                                             v-model="formData.answers[field.id]" :items="field?.options"
-                                            :placeholder="field?.placeholder" :label="field?.label"
+                                            :placeholder="field?.placeholder" 
                                             orientation="horizontal" indicator="end" variant="card" />
                                     </UFormField>
                                 </template>
 
                                 <template v-if="['select'].includes(field?.type)">
-                                    <UFormField :label="field?.label" :name="field?.id" :required="field?.required">
+                                    <h4 class="text-lg md:text-xl font-bold text-center text-secondary mb-8">{{
+                                        field?.label }}
+                                    </h4>
+
+                                    <UFormField :name="field?.id" :required="field?.required">
                                         <component class="w-full" size="xl" :is="fieldsMap[field?.type]"
                                             v-model="formData.answers[field.id]" :items="field?.options"
-                                            :placeholder="field?.placeholder" :label="field?.label" />
+                                            :placeholder="field?.placeholder" />
                                     </UFormField>
                                 </template>
 
