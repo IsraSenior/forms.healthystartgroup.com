@@ -29,8 +29,9 @@ const formData = reactive({
 
 const currentStep = ref(0);
 const start = ref(false)
-const evidenceID = ref(null)
-const submitting = ref(false)
+const evidenceID = ref(null);
+const submitting = ref(false);
+const submissionID = ref(null)
 
 const onSubmit = async () => {
     submitting.value = true;
@@ -52,14 +53,15 @@ const onSubmit = async () => {
         const response = await $directus.request($createItem('form_submissions', data));
         console.log('Form submitted successfully:', response);
         if (response) {
-            const pdfResponse = await generateEvidence(response?.id);
+            submissionID.value = response?.id;
+            const pdfResponse = await generateEvidence(submissionID.value);
         }
     } catch (error) {
         console.error('Error submitting form:', error);
     }
 };
 
-const generateEvidence = async (submissionID) => {
+const generateEvidence = async (id) => {
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -69,7 +71,7 @@ const generateEvidence = async (submissionID) => {
         method: "POST",
         headers: myHeaders,
         body: JSON.stringify({
-            id: submissionID
+            id
         }),
     })
 
@@ -103,6 +105,16 @@ const uploadEvidence = async (data) => {
 
         console.log("uploadEvidence response", response)
         evidenceID.value = response?.id;
+
+        try {
+            const response = await $directus.request($updateItem('form_submissions', submissionID.value, {
+                evidence: evidenceID.value
+            }));
+            console.log('Form update successfully:', response);
+
+        } catch (error) {
+            console.error('Error updating form:', error);
+        }
     } catch (error) {
         console.error('Error generation pdf:', error);
     }
