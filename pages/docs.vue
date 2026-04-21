@@ -283,13 +283,13 @@ const scrollTo = (id) => {
           <!-- Logo header -->
           <div class="shrink-0 px-5 py-5 border-b border-white/10">
             <Logo class="h-8 w-auto" />
-            <p class="text-[11px] text-white/40 mt-2 font-medium tracking-wide">Forms System — Docs</p>
+            <p class="text-[11px] text-white mt-2 font-medium tracking-wide">Forms System — Docs</p>
           </div>
 
           <!-- Nav -->
           <nav class="flex-1 overflow-y-auto py-5 px-3">
             <div v-for="group in navGroups" :key="group.label" class="mb-5">
-              <p class="text-[10px] font-bold text-white/30 uppercase tracking-widest px-3 mb-1.5">
+              <p class="text-[10px] font-bold text-white uppercase tracking-widest px-3 mb-1.5">
                 {{ group.label }}
               </p>
               <div class="space-y-px">
@@ -301,10 +301,10 @@ const scrollTo = (id) => {
                     'w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150',
                     activeSection === item.id
                       ? 'text-white bg-white/15 font-semibold'
-                      : 'text-white/60 hover:text-white hover:bg-white/10'
+                      : 'text-white hover:bg-white/10'
                   ]"
                 >
-                  <UIcon :name="item.icon" :class="['size-3.5 shrink-0', activeSection === item.id ? 'text-primary' : 'text-white/30']" />
+                  <UIcon :name="item.icon" :class="['size-3.5 shrink-0', activeSection === item.id ? 'text-primary' : 'text-white']" />
                   {{ item.label }}
                 </button>
               </div>
@@ -313,10 +313,10 @@ const scrollTo = (id) => {
 
           <!-- Bottom branding -->
           <div class="shrink-0 border-t border-white/10 px-5 py-4">
-            <p class="text-[10px] text-white/30 leading-relaxed">
+            <p class="text-[10px] text-white leading-relaxed">
               Powered by
               <a href="https://www.zunamicorp.com" target="_blank" rel="noopener"
-                 class="font-semibold text-white/50 hover:text-white transition-colors">
+                 class="font-semibold text-white transition-colors">
                 ZunamiCorp
               </a>
             </p>
