@@ -178,6 +178,18 @@ const quickTips = [
 
 const fieldTypeList = ['input', 'email', 'tel', 'textarea', 'select', 'radio', 'checkbox', 'toggle', 'signature']
 
+// ─── Directus external links ───────────────────────────────────────────────
+const directusLinks = [
+  { label: 'Filter Rules',       url: 'https://directus.io/docs/guides/connect/filter-rules',           icon: 'i-lucide-filter' },
+  { label: 'Data Model',         url: 'https://directus.io/docs/guides/data-model',                      icon: 'i-lucide-boxes' },
+  { label: 'Collections',        url: 'https://directus.io/docs/guides/data-model/collections',          icon: 'i-lucide-table-2' },
+  { label: 'Fields & Types',     url: 'https://directus.io/docs/guides/data-model/fields',               icon: 'i-lucide-columns-3' },
+  { label: 'Relations',          url: 'https://directus.io/docs/guides/data-model/relations',            icon: 'i-lucide-git-branch' },
+  { label: 'File Library',       url: 'https://directus.io/docs/guides/files/upload',                    icon: 'i-lucide-folder-open' },
+  { label: 'Roles & Permissions',url: 'https://directus.io/docs/guides/access-control/permissions',     icon: 'i-lucide-shield-check' },
+  { label: 'Flows & Automation', url: 'https://directus.io/docs/guides/flows',                          icon: 'i-lucide-zap' },
+]
+
 // ─── Scroll-spy ────────────────────────────────────────────────────────────
 const activeSection  = ref('overview')
 const mobileMenuOpen = ref(false)
@@ -890,6 +902,27 @@ const scrollTo = (id) => {
                        class="flex items-center gap-2 text-[13px] text-secondary hover:text-primary transition-colors">
                       <UIcon name="i-lucide-globe" class="size-3.5 text-gray-400 shrink-0" />
                       Forms Site
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Directus Docs -->
+                <div class="rounded-xl border border-gray-200 bg-white p-4">
+                  <div class="flex items-center gap-2 mb-3">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Directus Docs</p>
+                  </div>
+                  <div class="space-y-1.5">
+                    <a
+                      v-for="link in directusLinks"
+                      :key="link.url"
+                      :href="link.url"
+                      target="_blank"
+                      rel="noopener"
+                      class="flex items-center gap-2 text-[12px] text-gray-500 hover:text-primary transition-colors group"
+                    >
+                      <UIcon :name="link.icon" class="size-3 text-gray-300 group-hover:text-primary/60 shrink-0 transition-colors" />
+                      {{ link.label }}
+                      <UIcon name="i-lucide-arrow-up-right" class="size-2.5 ml-auto text-gray-300 group-hover:text-primary/40 shrink-0 transition-colors" />
                     </a>
                   </div>
                 </div>
