@@ -38,7 +38,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       directusUrl: process.env.DIRECTUS_URL || 'https://admin.healthystartgroup.com',
-      baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+      baseUrl: process.env.BASE_URL || 'https://forms.healthystartgroup.com',
       uploadsFolderId: process.env.UPLOADS_FOLDER_ID || '1b22fd7c-d86f-4ab8-be78-482df5693f4a',
     }
   },
