@@ -248,9 +248,14 @@ const scrollTo = (id) => {
       <USlideover v-model:open="mobileMenuOpen" side="left">
         <template #content>
           <div class="flex flex-col h-full bg-secondary">
-            <div class="shrink-0 px-5 py-5 border-b border-white/10">
-              <Logo class="h-8 w-auto" />
-              <p class="text-[11px] text-white mt-2 font-medium tracking-wide">Forms System — Docs</p>
+            <div class="shrink-0 px-5 py-4 border-b border-white/10 flex items-start justify-between gap-3">
+              <div>
+                <Logo class="h-8 w-auto" />
+                <p class="text-[11px] text-white mt-2 font-medium tracking-wide">Forms System — Docs</p>
+              </div>
+              <button @click="mobileMenuOpen = false" class="mt-1 p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors shrink-0">
+                <UIcon name="i-lucide-x" class="size-4" />
+              </button>
             </div>
             <nav class="flex-1 overflow-y-auto py-5 px-3">
               <div v-for="group in navGroups" :key="group.label" class="mb-5">
@@ -1014,8 +1019,8 @@ const scrollTo = (id) => {
         <!-- Footer -->
         <div class="border-t border-gray-100 py-10 text-center">
           <Logo variant="dark" class="h-5 w-auto mx-auto mb-3 opacity-30" />
-          <p class="text-xs text-gray-400">
-            HealthyStart Group Forms System ·
+          <p class="text-xs text-gray-400">HealthyStart Group Forms System</p>
+          <p class="text-xs text-gray-400 mt-1">
             Powered by <a href="https://zunamicorp.com" target="_blank" rel="noopener" class="text-primary hover:underline">ZunamiCorp</a>
           </p>
         </div>
