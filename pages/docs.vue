@@ -938,16 +938,6 @@ const scrollTo = (id) => {
                   </ul>
                 </div>
 
-                <!-- Field Types -->
-                <div class="rounded-xl border border-gray-200 bg-white p-4">
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Field Types</p>
-                  <div class="flex flex-wrap gap-1.5">
-                    <span v-for="t in fieldTypeList" :key="t"
-                      class="text-[11px] font-mono px-2 py-0.5 bg-gray-50 border border-gray-200 rounded-md text-gray-600">
-                      {{ t }}
-                    </span>
-                  </div>
-                </div>
 
               </div>
             </div><!-- end right panel -->
