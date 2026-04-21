@@ -311,6 +311,17 @@ const scrollTo = (id) => {
             </div>
           </nav>
 
+          <!-- Bottom branding -->
+          <div class="shrink-0 border-t border-gray-100 px-5 py-4">
+            <p class="text-[10px] text-gray-400 leading-relaxed">
+              Powered by
+              <a href="https://www.zunamicorp.com" target="_blank" rel="noopener"
+                 class="font-semibold text-gray-500 hover:text-primary transition-colors">
+                ZunamiCorp
+              </a>
+            </p>
+          </div>
+
         </aside>
 
         <!-- ── MAIN CONTENT ─────────────────────────────────────────────── -->
