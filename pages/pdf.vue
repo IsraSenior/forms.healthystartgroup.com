@@ -5,6 +5,7 @@ definePageMeta({
 
 const { $directus, $readItem } = useNuxtApp();
 const route = useRoute();
+const config = useRuntimeConfig();
 
 const { data: submission } = await useAsyncData('submission', async () => {
     const response = await $directus.request($readItem('form_submissions', route.query.submission, {
@@ -166,7 +167,7 @@ const { data: submission } = await useAsyncData('submission', async () => {
                         <div class="bg-white h-24 rounded-br-xl relative">
                             <span class="absolute top-4 left-4 text-secondary font-normal text-sm">Sign here</span>
 
-                            <img :src="`https://admin.healthystartgroup.com/assets/${submission?.answers?.signature}`"
+                            <img :src="`${config.public.directusUrl}/assets/${submission?.answers?.signature}`"
                                 class="h-full w-full object-contain absolute inset-0" alt="">
                         </div>
                     </footer>

@@ -1,12 +1,16 @@
 <script setup>
 const { $directus, $readItem, $createItem, $updateItem, $uploadFiles } = useNuxtApp();
 const route = useRoute();
+const config = useRuntimeConfig();
 
 const { data: form } = await useAsyncData('form', () => {
     return $directus.request($readItem('forms', route.params.form, {
         fields: ['id', 'title', 'description', {
-            fields: ['id', 'type', 'label', 'placeholder', 'Note', 'required', 'options'],
+            fields: ['id', 'type', 'label', 'slug', 'placeholder', 'Note', 'required', 'options', 'sort'],
         }],
+        deep: {
+            fields: { _sort: ['sort'] }
+        }
     }));
 });
 
@@ -96,7 +100,7 @@ const uploadEvidence = async (data) => {
         const blob = await (await fetch(`data:application/pdf;base64,${data.pdf}`)).blob();
         const file = new File([blob], data.filename, { type: "application/pdf" });
 
-        formData.append("folder", "1b22fd7c-d86f-4ab8-be78-482df5693f4a");
+        formData.append("folder", config.public.uploadsFolderId);
         formData.append("file", file);
 
         const response = await $directus.request($uploadFiles(formData, {
@@ -152,7 +156,7 @@ const disabled = computed(() => {
                                 {{ form?.description }}
                             </p>
 
-                            <UButton size="xl" target="_blank" @click.prevent="start = !start">
+                            <UButton size="xl" @click="start = true">
                                 Start now
                             </UButton>
                         </div>
@@ -224,7 +228,7 @@ const disabled = computed(() => {
 
                             <div class="flex items-center justify-center space-x-8">
                                 <UButton size="xl" target="_blank"
-                                    :href="`https://admin.healthystartgroup.com/assets/${evidenceID}`" download>Download
+                                    :href="`${config.public.directusUrl}/assets/${evidenceID}`" download>Download
                                     your
                                     evidence</UButton>
 

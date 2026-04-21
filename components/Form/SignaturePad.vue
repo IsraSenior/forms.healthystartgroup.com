@@ -1,6 +1,7 @@
 <script setup>
 const { $directus, $uploadFiles } = useNuxtApp();
 const route = useRoute();
+const config = useRuntimeConfig();
 const emit = defineEmits(['setValue']);
 
 const options = ref({
@@ -21,7 +22,7 @@ const handleSave = async function () {
     try {
         const formData = new FormData();
 
-        formData.append("folder", "1b22fd7c-d86f-4ab8-be78-482df5693f4a");
+        formData.append("folder", config.public.uploadsFolderId);
         formData.append("file", file);
 
         const response = await $directus.request($uploadFiles(formData, {

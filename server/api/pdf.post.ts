@@ -8,8 +8,8 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const pdfName = `evidencia-${body.id}.pdf`;
 
-  const url = `https://forms.healthystartgroup.com/pdf?submission=${body.id}`;
-  // const url = `http://localhost:3000/pdf?submission=${body.id}`;
+  const config = useRuntimeConfig();
+  const url = `${config.public.baseUrl}/pdf?submission=${body.id}`;
 
   let browser;
   try {

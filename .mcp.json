@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "directus": {
+      "type": "http",
+      "url": "https://admin.healthystartgroup.com/mcp",
+      "headers": {
+        "Authorization": "Bearer c-CblM0lFB64OSMpm07uaEbutQm_iQ7I"
+      }
+    }
+  }
+}
