@@ -51,10 +51,13 @@ const fieldTypes = [
 ]
 
 // ─── Preview mock data ─────────────────────────────────────────────────────
-const previewSelect = ref(null)
-const previewRadio  = ref(null)
-const previewCheck  = ref([])
-const previewToggle = ref(false)
+const previewSelect    = ref(null)
+const previewRadio     = ref(null)
+const previewCheck     = ref([])
+const previewToggle    = ref(false)
+const previewSignature = ref(null)
+
+const clearSignature = () => previewSignature.value?.clearCanvas()
 
 const stateOptions = [
   { label: 'Florida', value: 'FL' },
@@ -246,7 +249,7 @@ const scrollTo = (id) => {
       </div>
 
       <!-- ── MOBILE SLIDEOVER ────────────────────────────────────────────── -->
-      <USlideover v-model:open="mobileMenuOpen" side="left">
+      <USlideover v-model:open="mobileMenuOpen" side="left" title="Navigation" description="Main navigation menu" :ui="{ title: 'sr-only', description: 'sr-only' }">
         <template #content>
           <div class="flex flex-col h-full bg-secondary">
             <div class="shrink-0 px-5 py-4 border-b border-white/10 flex items-start justify-between gap-3">
@@ -427,16 +430,59 @@ const scrollTo = (id) => {
 
           <!-- Quick flow -->
           <UCard>
-            <p class="text-sm font-semibold text-secondary mb-4">High-level flow</p>
-            <div class="flex flex-wrap items-center gap-2 text-sm">
-              <span class="px-3 py-1.5 bg-secondary text-white rounded-full font-medium">Admin creates form in Directus</span>
-              <UIcon name="i-lucide-arrow-right" class="text-gray-400 size-4" />
-              <span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full font-medium">Patient opens public URL</span>
-              <UIcon name="i-lucide-arrow-right" class="text-gray-400 size-4" />
-              <span class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full font-medium">Completes multi-step form</span>
-              <UIcon name="i-lucide-arrow-right" class="text-gray-400 size-4" />
-              <span class="px-3 py-1.5 bg-primary text-white rounded-full font-medium">PDF evidence generated & stored</span>
+            <p class="text-sm font-semibold text-secondary mb-6">High-level flow</p>
+
+            <!-- Desktop: horizontal stepper -->
+            <div class="hidden sm:flex items-start">
+
+              <template v-for="(step, i) in [
+                { icon: 'i-lucide-user-cog',    label: 'Admin creates form',       sub: 'in Directus CMS',           bg: 'bg-secondary', text: 'text-white' },
+                { icon: 'i-lucide-globe',        label: 'Patient opens URL',        sub: 'public form link',           bg: 'bg-gray-100',  text: 'text-secondary' },
+                { icon: 'i-lucide-list-checks',  label: 'Completes wizard',         sub: 'one field per step',         bg: 'bg-gray-100',  text: 'text-secondary' },
+                { icon: 'i-lucide-file-check-2', label: 'PDF auto-generated',       sub: 'stored in Directus',         bg: 'bg-primary',   text: 'text-white' },
+              ]" :key="i">
+
+                <!-- Step node -->
+                <div class="flex flex-col items-center flex-1 min-w-0 text-center">
+                  <div :class="['size-12 rounded-xl flex items-center justify-center mb-3 shadow-sm', step.bg]">
+                    <UIcon :name="step.icon" :class="['size-5', step.text]" />
+                  </div>
+                  <p class="text-xs font-semibold text-secondary leading-snug">{{ step.label }}</p>
+                  <p class="text-[11px] text-gray-400 mt-0.5">{{ step.sub }}</p>
+                </div>
+
+                <!-- Connector -->
+                <div v-if="i < 3" class="flex items-start pt-5 px-1 shrink-0">
+                  <div class="flex items-center gap-0.5">
+                    <div class="w-5 h-px bg-gray-200"></div>
+                    <UIcon name="i-lucide-chevron-right" class="size-3.5 text-gray-300 -ml-1" />
+                  </div>
+                </div>
+
+              </template>
             </div>
+
+            <!-- Mobile: vertical timeline -->
+            <div class="flex sm:hidden flex-col gap-0">
+              <div v-for="(step, i) in [
+                { icon: 'i-lucide-user-cog',    label: 'Admin creates form',   sub: 'in Directus CMS',       bg: 'bg-secondary', text: 'text-white' },
+                { icon: 'i-lucide-globe',        label: 'Patient opens URL',    sub: 'public form link',       bg: 'bg-gray-100',  text: 'text-secondary' },
+                { icon: 'i-lucide-list-checks',  label: 'Completes wizard',     sub: 'one field per step',     bg: 'bg-gray-100',  text: 'text-secondary' },
+                { icon: 'i-lucide-file-check-2', label: 'PDF auto-generated',   sub: 'stored in Directus',     bg: 'bg-primary',   text: 'text-white' },
+              ]" :key="i" class="flex items-start gap-3">
+                <div class="flex flex-col items-center shrink-0">
+                  <div :class="['size-9 rounded-lg flex items-center justify-center shadow-sm', step.bg]">
+                    <UIcon :name="step.icon" :class="['size-4', step.text]" />
+                  </div>
+                  <div v-if="i < 3" class="w-px h-6 bg-gray-200 mt-1"></div>
+                </div>
+                <div class="pt-1.5 pb-2">
+                  <p class="text-xs font-semibold text-secondary leading-snug">{{ step.label }}</p>
+                  <p class="text-[11px] text-gray-400 mt-0.5">{{ step.sub }}</p>
+                </div>
+              </div>
+            </div>
+
           </UCard>
         </section>
 
@@ -580,11 +626,16 @@ const scrollTo = (id) => {
                 <UBadge label="signature" color="secondary" variant="soft" size="sm" />
               </div>
               <p class="text-sm text-gray-500 mb-4">Patient draws their signature on a canvas. Saved as an SVG file in Directus.</p>
-              <div class="border border-dashed border-gray-300 rounded-xl bg-gray-50 h-28 flex items-center justify-center">
-                <div class="text-center text-gray-400">
-                  <UIcon name="i-lucide-pen-line" class="size-8 mb-1" />
-                  <p class="text-sm">Signature canvas — draws here</p>
-                </div>
+              <div class="w-full rounded-md ring ring-inset ring-accented bg-default px-2.5 py-1.5">
+                <NuxtSignaturePad
+                  ref="previewSignature"
+                  height="140px"
+                  width="100%"
+                  :options="{ penColor: 'rgb(0,0,0)', backgroundColor: 'rgb(255,255,255)', maxWidth: 2, minWidth: 2 }"
+                />
+              </div>
+              <div class="flex justify-center mt-3">
+                <UButton size="xs" color="secondary" @click="clearSignature">Clear</UButton>
               </div>
             </UCard>
 
@@ -793,28 +844,28 @@ const scrollTo = (id) => {
 
           <!-- Relationship diagram -->
           <UCard class="mb-8">
-            <p class="font-semibold text-secondary mb-4">Collection relationships</p>
-            <div class="overflow-x-auto">
-              <div class="flex items-start gap-3 min-w-[560px] text-xs font-mono">
-                <div class="border-2 border-secondary rounded-lg px-3 py-2 bg-secondary/5 text-secondary font-semibold">forms</div>
-                <div class="flex flex-col justify-around h-16 text-gray-400">
-                  <div class="flex items-center gap-1"><span>──(o2m)──▶</span></div>
-                  <div class="flex items-center gap-1"><span>──(o2m)──▶</span></div>
+            <p class="font-semibold text-secondary mb-5">Collection relationships</p>
+            <div class="space-y-2">
+
+              <!-- Row helper: source → rel → target -->
+              <div v-for="rel in [
+                { from: 'forms',            fromColor: 'border-secondary bg-secondary/5 text-secondary', rel: 'one-to-many', to: 'form_fields',      toColor: 'border-primary bg-primary/5 text-primary' },
+                { from: 'forms',            fromColor: 'border-secondary bg-secondary/5 text-secondary', rel: 'one-to-many', to: 'form_submissions',  toColor: 'border-primary bg-primary/5 text-primary' },
+                { from: 'form_submissions', fromColor: 'border-primary bg-primary/5 text-primary',       rel: 'one-to-many', to: 'form_answers',      toColor: 'border-gray-300 bg-gray-50 text-gray-600' },
+                { from: 'form_answers',     fromColor: 'border-gray-300 bg-gray-50 text-gray-600',       rel: 'many-to-one', to: 'form_fields',       toColor: 'border-primary bg-primary/5 text-primary' },
+              ]" :key="rel.from + rel.to" class="flex items-center gap-2 text-xs">
+
+                <span :class="['font-mono font-semibold px-2.5 py-1 rounded-lg border-2 shrink-0', rel.fromColor]">{{ rel.from }}</span>
+
+                <div class="flex items-center gap-1 shrink-0">
+                  <div class="h-px w-5 bg-gray-300"></div>
+                  <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-500 whitespace-nowrap">{{ rel.rel }}</span>
+                  <div class="h-px w-5 bg-gray-300"></div>
+                  <UIcon name="i-lucide-chevron-right" class="size-3 text-gray-400 -ml-1" />
                 </div>
-                <div class="flex flex-col gap-3">
-                  <div class="border-2 border-primary rounded-lg px-3 py-2 bg-primary/5 text-primary font-semibold">form_fields</div>
-                  <div class="border-2 border-primary rounded-lg px-3 py-2 bg-primary/5 text-primary font-semibold">form_submissions</div>
-                </div>
-                <div class="flex items-end pb-0.5 text-gray-400 mt-9">
-                  <span>──(o2m)──▶</span>
-                </div>
-                <div class="flex flex-col justify-end h-16">
-                  <div class="border-2 border-gray-400 rounded-lg px-3 py-2 bg-gray-50 text-gray-600 font-semibold">form_answers</div>
-                </div>
-                <div class="flex items-end pb-0.5 text-gray-400 mt-9 text-[10px] flex-col justify-end h-16 gap-1">
-                  <span class="text-gray-300">◀──(m2o)──</span>
-                  <span class="text-gray-300 text-[9px] italic">(references form_fields)</span>
-                </div>
+
+                <span :class="['font-mono font-semibold px-2.5 py-1 rounded-lg border-2 shrink-0', rel.toColor]">{{ rel.to }}</span>
+
               </div>
             </div>
           </UCard>
@@ -1018,19 +1069,13 @@ const scrollTo = (id) => {
         </section>
 
         <!-- Footer -->
-        <div class="border-t border-gray-100 py-10 text-center">
-          <Logo variant="dark" class="h-5 w-auto mx-auto mb-3 opacity-30" />
-          <p class="text-xs text-gray-400">HealthyStart Group Forms System</p>
-          <p class="text-xs text-gray-400 mt-1">
-            Powered by <a href="https://zunamicorp.com" target="_blank" rel="noopener" class="text-primary hover:underline">ZunamiCorp</a>
-          </p>
-        </div>
+        <div class="border-t border-gray-100 py-10"></div>
 
             </div><!-- end content column -->
 
             <!-- ── RIGHT PANEL ──────────────────────────────────────────── -->
-            <div class="hidden xl:block w-56 shrink-0 pt-14">
-              <div class="sticky top-8 space-y-4">
+            <div class="hidden xl:block w-56 shrink-0 sticky top-8 self-start max-h-[calc(100vh-2rem)] overflow-y-auto pt-14 pb-4">
+              <div class="space-y-4">
 
                 <!-- Quick Access -->
                 <div class="rounded-xl border border-gray-200 bg-white p-4">
