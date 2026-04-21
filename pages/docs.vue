@@ -191,29 +191,31 @@ const scrollTo = (id) => {
 
       <!-- ── MOBILE SLIDEOVER ────────────────────────────────────────────── -->
       <USlideover v-model:open="mobileMenuOpen" side="left">
-        <div class="flex flex-col h-full">
-          <div class="px-5 pt-6 pb-4 border-b border-gray-100">
-            <Logo variant="dark" class="h-6 w-auto" />
+        <template #content>
+          <div class="flex flex-col h-full">
+            <div class="px-5 pt-6 pb-4 border-b border-gray-100">
+              <Logo variant="dark" class="h-6 w-auto" />
+            </div>
+            <div class="flex-1 overflow-y-auto px-4 py-5">
+              <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3 px-2">On this page</p>
+              <nav class="space-y-px">
+                <button
+                  v-for="section in sections"
+                  :key="section.id"
+                  @click="scrollTo(section.id)"
+                  :class="[
+                    'w-full text-left px-3 py-2 rounded-lg text-[13px] font-medium transition-colors',
+                    activeSection === section.id
+                      ? 'text-primary bg-primary/5 font-semibold'
+                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                  ]"
+                >
+                  {{ section.label }}
+                </button>
+              </nav>
+            </div>
           </div>
-          <div class="flex-1 overflow-y-auto px-4 py-5">
-            <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3 px-2">On this page</p>
-            <nav class="space-y-px">
-              <button
-                v-for="section in sections"
-                :key="section.id"
-                @click="scrollTo(section.id)"
-                :class="[
-                  'w-full text-left px-3 py-2 rounded-lg text-[13px] font-medium transition-colors',
-                  activeSection === section.id
-                    ? 'text-primary bg-primary/5 font-semibold'
-                    : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                ]"
-              >
-                {{ section.label }}
-              </button>
-            </nav>
-          </div>
-        </div>
+        </template>
       </USlideover>
 
       <!-- ── LAYOUT ──────────────────────────────────────────────────────── -->
