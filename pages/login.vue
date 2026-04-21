@@ -62,7 +62,7 @@ const handleLogin = async () => {
         await login(form.email, form.password)
         await navigateTo('/dashboard')
     } catch (err) {
-        error.value = err.message || 'Error al iniciar sesión'
+        error.value = err.message || 'Failed to sign in'
     } finally {
         loading.value = false
     }

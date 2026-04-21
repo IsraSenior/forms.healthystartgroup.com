@@ -4,17 +4,17 @@ import { createDirectus, authentication, rest, readMe } from '@directus/sdk'
 export const useAuth = () => {
   const config = useRuntimeConfig()
 
-  // Cliente de Directus
+  // Directus client
   const client = createDirectus(config.public.directusUrl)
     .with(authentication('json'))
     .with(rest())
 
-  // Estado reactivo del usuario
+  // Reactive auth state
   const user = useState('auth.user', () => null)
   const token = useCookie('auth-token', {
     default: () => null,
-    maxAge: 60 * 60 * 24 * 7, // 7 días
-    httpOnly: false, // Necesario para acceso desde el cliente
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    httpOnly: false, // Required for client-side access
     secure: true,
     sameSite: 'strict'
   })
@@ -31,7 +31,7 @@ export const useAuth = () => {
 
       return response
     } catch (error) {
-      console.error('Error en login:', error)
+      console.error('Login error:', error)
       throw error
     }
   }
@@ -41,7 +41,7 @@ export const useAuth = () => {
     try {
       await client.logout()
     } catch (error) {
-      console.error('Error en logout:', error)
+      console.error('Logout error:', error)
     } finally {
       token.value = null
       user.value = null
@@ -49,7 +49,7 @@ export const useAuth = () => {
     }
   }
 
-  // Obtener usuario actual
+  // Get current user
   const getCurrentUser = async () => {
     if (!token.value) return null
 
@@ -65,16 +65,16 @@ export const useAuth = () => {
       user.value = currentUser
       return currentUser
     } catch (error) {
-      console.error('Error obteniendo usuario:', error)
+      console.error('Error fetching current user:', error)
       await logout()
       return null
     }
   }
 
-  // Verificar si está autenticado
+  // Check if authenticated
   const isAuthenticated = computed(() => !!token.value && !!user.value)
 
-  // Refresh token automático
+  // Automatic token refresh
   const refreshToken = async () => {
     if (!token.value) return false
 
@@ -83,7 +83,7 @@ export const useAuth = () => {
       token.value = response.access_token
       return true
     } catch (error) {
-      console.error('Error refrescando token:', error)
+      console.error('Token refresh error:', error)
       await logout()
       return false
     }
