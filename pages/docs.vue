@@ -167,6 +167,17 @@ const createFormSteps = [
   { title: 'Set the sort order carefully', body: 'The Sort value determines which step each field appears on. Field with sort=1 appears first, sort=2 second, and so on. Every field = one step in the patient wizard.' },
 ]
 
+// ─── Right panel data ─────────────────────────────────────────────────────
+const quickTips = [
+  'Each field becomes one step in the patient wizard',
+  'Form status must be "published" for patients to access it',
+  'Options fields require valid JSON — no trailing commas',
+  'The Sort value controls the order of steps (1 = first)',
+  'Toggle type uses Note as heading, Label as checkbox text',
+]
+
+const fieldTypeList = ['input', 'email', 'tel', 'textarea', 'select', 'radio', 'checkbox', 'toggle', 'signature']
+
 // ─── Scroll-spy ────────────────────────────────────────────────────────────
 const activeSection  = ref('overview')
 const mobileMenuOpen = ref(false)
@@ -276,7 +287,10 @@ const scrollTo = (id) => {
 
         <!-- ── MAIN CONTENT ─────────────────────────────────────────────── -->
         <main class="flex-1 min-w-0 lg:pl-64">
-          <div class="max-w-[756px] mx-auto px-6 sm:px-10">
+          <div class="max-w-screen-xl mx-auto px-6 sm:px-8 flex gap-10 items-start">
+
+            <!-- Content column -->
+            <div class="flex-1 min-w-0">
 
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 1: OVERVIEW                                            -->
@@ -857,7 +871,55 @@ const scrollTo = (id) => {
           </p>
         </div>
 
-          </div>
+            </div><!-- end content column -->
+
+            <!-- ── RIGHT PANEL ──────────────────────────────────────────── -->
+            <div class="hidden xl:block w-56 shrink-0 pt-14">
+              <div class="sticky top-8 space-y-4">
+
+                <!-- Quick Access -->
+                <div class="rounded-xl border border-gray-200 bg-white p-4">
+                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Quick Access</p>
+                  <div class="space-y-2">
+                    <a href="https://admin.healthystartgroup.com" target="_blank" rel="noopener"
+                       class="flex items-center gap-2 text-[13px] text-secondary hover:text-primary transition-colors">
+                      <UIcon name="i-lucide-layout-dashboard" class="size-3.5 text-gray-400 shrink-0" />
+                      Directus Admin
+                    </a>
+                    <a href="https://forms.healthystartgroup.com" target="_blank" rel="noopener"
+                       class="flex items-center gap-2 text-[13px] text-secondary hover:text-primary transition-colors">
+                      <UIcon name="i-lucide-globe" class="size-3.5 text-gray-400 shrink-0" />
+                      Forms Site
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Key Reminders -->
+                <div class="rounded-xl border border-primary/20 bg-primary/5 p-4">
+                  <p class="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">Key Reminders</p>
+                  <ul class="space-y-2">
+                    <li v-for="tip in quickTips" :key="tip" class="flex items-start gap-2">
+                      <UIcon name="i-lucide-check" class="size-3 text-primary mt-0.5 shrink-0" />
+                      <span class="text-[12px] text-gray-600 leading-relaxed">{{ tip }}</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Field Types -->
+                <div class="rounded-xl border border-gray-200 bg-white p-4">
+                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Field Types</p>
+                  <div class="flex flex-wrap gap-1.5">
+                    <span v-for="t in fieldTypeList" :key="t"
+                      class="text-[11px] font-mono px-2 py-0.5 bg-gray-50 border border-gray-200 rounded-md text-gray-600">
+                      {{ t }}
+                    </span>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- end right panel -->
+
+          </div><!-- end flex row -->
         </main>
       </div>
     </div>
