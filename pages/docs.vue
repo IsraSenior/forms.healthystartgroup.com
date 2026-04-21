@@ -240,8 +240,9 @@ const scrollTo = (id) => {
     <div>
 
       <!-- ── MOBILE NAV BAR ──────────────────────────────────────────────── -->
-      <div class="lg:hidden sticky top-0 z-40 h-10 bg-white/90 backdrop-blur border-b border-gray-200 flex items-center gap-2 px-5">
-        <UButton variant="ghost" color="neutral" icon="i-lucide-menu" label="Navigation" size="xs" @click="mobileMenuOpen = true" />
+      <div class="lg:hidden sticky top-0 z-40 h-12 bg-white/90 backdrop-blur border-b border-gray-200 flex items-center justify-between px-4">
+        <Logo icon-only class="h-7 w-auto" />
+        <UButton variant="ghost" color="neutral" icon="i-lucide-menu" size="sm" @click="mobileMenuOpen = true" />
       </div>
 
       <!-- ── MOBILE SLIDEOVER ────────────────────────────────────────────── -->

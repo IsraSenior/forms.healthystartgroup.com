@@ -1,5 +1,5 @@
 <template>
-    <svg viewBox="0 0 1364.8 282.1" style="enable-background:new 0 0 1364.8 282.1;" xml:space="preserve" :style="{ '--logo-text': variant === 'dark' ? '#002d74' : '#FFFFFF' }">
+    <svg :viewBox="iconOnly ? '0 0 282.2 282.1' : '0 0 1364.8 282.1'" style="enable-background:new 0 0 1364.8 282.1;" xml:space="preserve" :style="{ '--logo-text': variant === 'dark' ? '#002d74' : '#FFFFFF' }">
         <g>
             <g>
                 <path class="st0" d="M91.1,0C40.8,0,0,40.8,0,91.1v191h191c50.3,0,91.1-40.8,91.1-91.1V0L91.1,0L91.1,0z">
@@ -72,7 +72,8 @@
 
 <script setup>
 defineProps({
-  variant: { type: String, default: 'default' }
+  variant:  { type: String,  default: 'default' },
+  iconOnly: { type: Boolean, default: false },
 })
 </script>
 
