@@ -146,7 +146,6 @@ const createFormSteps = [
 
 // ─── Scroll-spy ────────────────────────────────────────────────────────────
 const activeSection   = ref('overview')
-const mobileMenuOpen  = ref(false)
 
 onMounted(() => {
   const observer = new IntersectionObserver(
@@ -165,7 +164,6 @@ onMounted(() => {
 
 const scrollTo = (id) => {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  mobileMenuOpen.value = false
 }
 </script>
 
@@ -173,17 +171,9 @@ const scrollTo = (id) => {
   <div class="min-h-screen bg-gray-50">
 
     <!-- ── HEADER ───────────────────────────────────────────────────────── -->
-    <header class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
-      <div class="flex items-center justify-between h-16 px-4 sm:px-6">
+    <header class="fixed top-0 left-0 right-0 z-50 h-16 bg-white border-b border-gray-200 shadow-sm">
+      <div class="flex items-center justify-between h-full px-4 sm:px-6 max-w-screen-2xl mx-auto">
         <div class="flex items-center gap-3">
-          <!-- Mobile hamburger -->
-          <UButton
-            class="lg:hidden"
-            variant="ghost"
-            color="secondary"
-            icon="i-lucide-menu"
-            @click="mobileMenuOpen = true"
-          />
           <Logo class="h-9 w-auto" />
           <span class="hidden sm:block text-secondary font-semibold text-lg border-l border-gray-200 pl-3 ml-1">
             Documentation
@@ -193,17 +183,17 @@ const scrollTo = (id) => {
           variant="ghost"
           color="secondary"
           icon="i-lucide-arrow-left"
-          :to="`/forms/703de9db-ce43-4daa-a224-f7743fc8b9b1`"
-          label="Back to Forms"
+          to="/"
+          label="Back"
         />
       </div>
     </header>
 
     <!-- ── BODY (sidebar + content) ─────────────────────────────────────── -->
-    <div class="flex">
+    <div class="flex pt-16 min-h-screen">
 
       <!-- Sidebar — desktop ───────────────────────────────────────────── -->
-      <aside class="hidden lg:flex flex-col w-64 shrink-0 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto bg-white border-r border-gray-200 py-6 px-3">
+      <aside class="hidden lg:flex flex-col w-64 shrink-0 fixed top-16 left-0 h-[calc(100vh-4rem)] overflow-y-auto bg-white border-r border-gray-200 py-6 px-3">
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-3">Contents</p>
         <nav class="space-y-0.5">
           <button
@@ -223,34 +213,9 @@ const scrollTo = (id) => {
         </nav>
       </aside>
 
-      <!-- Sidebar — mobile (USlideover) ──────────────────────────────── -->
-      <USlideover v-model:open="mobileMenuOpen" side="left" :ui="{ width: 'w-64' }">
-        <div class="flex flex-col h-full bg-white py-6 px-3">
-          <div class="flex items-center justify-between mb-6 px-3">
-            <span class="text-secondary font-semibold">Contents</span>
-            <UButton variant="ghost" color="secondary" icon="i-lucide-x" @click="mobileMenuOpen = false" />
-          </div>
-          <nav class="space-y-0.5">
-            <button
-              v-for="section in sections"
-              :key="section.id"
-              @click="scrollTo(section.id)"
-              :class="[
-                'w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left',
-                activeSection === section.id
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-secondary'
-              ]"
-            >
-              <UIcon :name="section.icon" class="size-4 shrink-0" />
-              {{ section.label }}
-            </button>
-          </nav>
-        </div>
-      </USlideover>
-
       <!-- ── MAIN CONTENT ───────────────────────────────────────────────── -->
-      <main class="flex-1 min-w-0 px-4 sm:px-8 py-10 max-w-4xl mx-auto w-full space-y-20">
+      <main class="flex-1 min-w-0 lg:ml-64 px-4 sm:px-8 py-10">
+        <div class="max-w-4xl mx-auto space-y-20">
 
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 1: OVERVIEW                                            -->
@@ -830,6 +795,7 @@ const scrollTo = (id) => {
           </p>
         </div>
 
+        </div>
       </main>
     </div>
 
