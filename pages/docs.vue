@@ -170,90 +170,93 @@ const scrollTo = (id) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-[#F8FAFC]">
 
     <!-- ── HEADER ───────────────────────────────────────────────────────── -->
-    <header class="fixed top-0 left-0 right-0 z-50 h-14 bg-white/80 backdrop-blur-lg border-b border-gray-200">
-      <div class="flex items-center justify-between h-full px-4 sm:px-6 max-w-screen-xl mx-auto">
-        <div class="flex items-center gap-3">
-          <Logo variant="dark" class="h-8 w-auto" />
-          <div class="hidden sm:block w-px h-6 bg-gray-200" />
-          <span class="hidden sm:block text-secondary font-semibold text-base">Documentation</span>
-        </div>
-        <UButton
-          variant="ghost"
-          color="neutral"
-          icon="i-lucide-arrow-left"
-          to="/"
-          label="Back"
-          size="sm"
-        />
+    <header class="fixed top-0 inset-x-0 z-50 h-14 bg-white/90 backdrop-blur-lg border-b border-gray-200">
+      <div class="h-full max-w-screen-xl mx-auto px-5 sm:px-8 flex items-center gap-3">
+        <Logo variant="dark" class="h-7 w-auto shrink-0" />
+        <div class="w-px h-5 bg-gray-200 shrink-0" />
+        <span class="text-sm font-semibold text-secondary tracking-wide">Documentation</span>
       </div>
     </header>
 
-    <!-- ── MOBILE NAV BAR ────────────────────────────────────────────────── -->
-    <div class="lg:hidden sticky top-14 z-40 h-10 bg-white/80 backdrop-blur-lg border-b border-gray-200 flex items-center px-4">
-      <UButton variant="ghost" color="neutral" icon="i-lucide-menu" label="Menu" size="xs" @click="mobileMenuOpen = true" />
-    </div>
+    <!-- ── BODY: empuja todo el contenido debajo del header fijo ─────────── -->
+    <div class="pt-14">
 
-    <!-- ── MOBILE SLIDEOVER ──────────────────────────────────────────────── -->
-    <USlideover v-model:open="mobileMenuOpen" side="left">
-      <div class="p-5">
-        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Contents</p>
-        <nav class="space-y-0.5">
-          <button
-            v-for="section in sections"
-            :key="section.id"
-            @click="scrollTo(section.id)"
-            :class="[
-              'w-full text-left px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors',
-              activeSection === section.id
-                ? 'text-primary bg-primary/5 font-semibold'
-                : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-            ]"
-          >
-            {{ section.label }}
-          </button>
-        </nav>
+      <!-- ── MOBILE NAV BAR ──────────────────────────────────────────────── -->
+      <div class="lg:hidden sticky top-14 z-40 h-10 bg-white/90 backdrop-blur border-b border-gray-200 flex items-center gap-2 px-5">
+        <UButton variant="ghost" color="neutral" icon="i-lucide-menu" label="Navigation" size="xs" @click="mobileMenuOpen = true" />
       </div>
-    </USlideover>
 
-    <!-- ── BODY ──────────────────────────────────────────────────────────── -->
-    <div class="flex">
+      <!-- ── MOBILE SLIDEOVER ────────────────────────────────────────────── -->
+      <USlideover v-model:open="mobileMenuOpen" side="left">
+        <div class="flex flex-col h-full">
+          <div class="px-5 pt-6 pb-4 border-b border-gray-100">
+            <Logo variant="dark" class="h-6 w-auto" />
+          </div>
+          <div class="flex-1 overflow-y-auto px-4 py-5">
+            <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3 px-2">On this page</p>
+            <nav class="space-y-px">
+              <button
+                v-for="section in sections"
+                :key="section.id"
+                @click="scrollTo(section.id)"
+                :class="[
+                  'w-full text-left px-3 py-2 rounded-lg text-[13px] font-medium transition-colors',
+                  activeSection === section.id
+                    ? 'text-primary bg-primary/5 font-semibold'
+                    : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                ]"
+              >
+                {{ section.label }}
+              </button>
+            </nav>
+          </div>
+        </div>
+      </USlideover>
 
-      <!-- Sidebar — desktop ───────────────────────────────────────────── -->
-      <aside class="hidden lg:block fixed top-14 left-0 w-56 h-[calc(100vh-3.5rem)] overflow-y-auto border-r border-gray-200 bg-white py-6 px-4">
-        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Contents</p>
-        <nav class="space-y-0.5">
-          <button
-            v-for="section in sections"
-            :key="section.id"
-            @click="scrollTo(section.id)"
-            :class="[
-              'w-full text-left px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors',
-              activeSection === section.id
-                ? 'text-primary bg-primary/5 font-semibold'
-                : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-            ]"
-          >
-            {{ section.label }}
-          </button>
-        </nav>
-      </aside>
+      <!-- ── LAYOUT ──────────────────────────────────────────────────────── -->
+      <div class="flex min-h-[calc(100vh-3.5rem)]">
 
-      <!-- ── MAIN CONTENT ───────────────────────────────────────────────── -->
-      <main class="lg:pl-56 pt-14 w-full">
-        <div class="max-w-3xl mx-auto px-4 sm:px-8 py-12 space-y-16">
+        <!-- Sidebar — desktop ─────────────────────────────────────────── -->
+        <aside class="hidden lg:flex flex-col fixed top-14 left-0 w-60 h-[calc(100vh-3.5rem)] border-r border-gray-200 bg-white">
+          <div class="flex-1 overflow-y-auto py-8 px-4">
+            <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-4 px-2">On this page</p>
+            <nav class="space-y-px">
+              <button
+                v-for="section in sections"
+                :key="section.id"
+                @click="scrollTo(section.id)"
+                :class="[
+                  'w-full text-left px-3 py-2 rounded-lg text-[13px] font-medium transition-colors',
+                  activeSection === section.id
+                    ? 'text-primary bg-primary/5 font-semibold'
+                    : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                ]"
+              >
+                {{ section.label }}
+              </button>
+            </nav>
+          </div>
+          <div class="shrink-0 border-t border-gray-100 p-5">
+            <Logo variant="dark" class="h-5 w-auto opacity-30" />
+          </div>
+        </aside>
+
+        <!-- ── MAIN CONTENT ─────────────────────────────────────────────── -->
+        <main class="flex-1 min-w-0 lg:pl-60">
+          <div class="max-w-[756px] mx-auto px-6 sm:px-10">
 
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 1: OVERVIEW                                            -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="overview" class="scroll-mt-24 pb-12 border-b border-gray-100">
-          <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-info" class="size-6 text-primary" />
-            <h1 class="text-2xl font-bold text-secondary">Overview</h1>
+        <section id="overview" class="scroll-mt-24 py-14 border-b border-gray-100">
+          <div class="flex items-center gap-2.5 mb-3">
+            <UIcon name="i-lucide-info" class="size-5 text-primary shrink-0" />
+            <h1 class="text-xl font-bold text-secondary">Overview</h1>
           </div>
-          <p class="text-gray-500 text-sm mb-8">What this system is and how it works</p>
+          <p class="text-gray-500 text-sm leading-relaxed mb-6">What this system is and how it works</p>
 
           <p class="text-gray-700 leading-relaxed mb-8">
             The <strong class="text-secondary">HealthyStart Group Forms System</strong> is a dynamic form builder that allows administrators to create patient-facing forms entirely from the Directus CMS — no code changes required. Each form is a multi-step wizard where patients answer one question at a time. Upon submission, a signed PDF evidence document is automatically generated and stored.
@@ -325,12 +328,12 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 2: CREATE A FORM                                       -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="create-form" class="scroll-mt-24 pb-12 border-b border-gray-100">
-          <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-plus-circle" class="size-6 text-primary" />
-            <h2 class="text-2xl font-bold text-secondary">Create a Form</h2>
+        <section id="create-form" class="scroll-mt-24 py-14 border-b border-gray-100">
+          <div class="flex items-center gap-2.5 mb-3">
+            <UIcon name="i-lucide-plus-circle" class="size-5 text-primary shrink-0" />
+            <h2 class="text-xl font-bold text-secondary">Create a Form</h2>
           </div>
-          <p class="text-gray-500 text-sm mb-8">Step-by-step guide to building a new form in Directus</p>
+          <p class="text-gray-500 text-sm leading-relaxed mb-6">Step-by-step guide to building a new form in Directus</p>
 
           <div class="space-y-4">
             <div v-for="(step, i) in createFormSteps" :key="i" class="flex gap-4">
@@ -360,12 +363,12 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 3: FIELD TYPES                                         -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="field-types" class="scroll-mt-24 pb-12 border-b border-gray-100">
-          <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-text-cursor-input" class="size-6 text-primary" />
-            <h2 class="text-2xl font-bold text-secondary">Field Types</h2>
+        <section id="field-types" class="scroll-mt-24 py-14 border-b border-gray-100">
+          <div class="flex items-center gap-2.5 mb-3">
+            <UIcon name="i-lucide-text-cursor-input" class="size-5 text-primary shrink-0" />
+            <h2 class="text-xl font-bold text-secondary">Field Types</h2>
           </div>
-          <p class="text-gray-500 text-sm mb-8">9 types available — the preview shows exactly what patients see</p>
+          <p class="text-gray-500 text-sm leading-relaxed mb-6">9 types available — the preview shows exactly what patients see</p>
 
           <div class="grid sm:grid-cols-2 gap-5">
 
@@ -476,12 +479,12 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 4: CONFIGURE OPTIONS                                   -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="configure-options" class="scroll-mt-24 pb-12 border-b border-gray-100">
-          <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-settings-2" class="size-6 text-primary" />
-            <h2 class="text-2xl font-bold text-secondary">Configure Options</h2>
+        <section id="configure-options" class="scroll-mt-24 py-14 border-b border-gray-100">
+          <div class="flex items-center gap-2.5 mb-3">
+            <UIcon name="i-lucide-settings-2" class="size-5 text-primary shrink-0" />
+            <h2 class="text-xl font-bold text-secondary">Configure Options</h2>
           </div>
-          <p class="text-gray-500 text-sm mb-8">For <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">select</code>, <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">radio</code>, and <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">checkbox</code> field types</p>
+          <p class="text-gray-500 text-sm leading-relaxed mb-6">For <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">select</code>, <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">radio</code>, and <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">checkbox</code> field types</p>
 
           <UCard class="mb-6">
             <p class="font-semibold text-secondary mb-3">Format</p>
@@ -540,12 +543,12 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 5: PUBLISH & SHARE                                     -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="publish-share" class="scroll-mt-24 pb-12 border-b border-gray-100">
-          <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-share-2" class="size-6 text-primary" />
-            <h2 class="text-2xl font-bold text-secondary">Publish & Share</h2>
+        <section id="publish-share" class="scroll-mt-24 py-14 border-b border-gray-100">
+          <div class="flex items-center gap-2.5 mb-3">
+            <UIcon name="i-lucide-share-2" class="size-5 text-primary shrink-0" />
+            <h2 class="text-xl font-bold text-secondary">Publish & Share</h2>
           </div>
-          <p class="text-gray-500 text-sm mb-8">Make a form accessible to patients</p>
+          <p class="text-gray-500 text-sm leading-relaxed mb-6">Make a form accessible to patients</p>
 
           <div class="space-y-4 mb-6">
             <UCard>
@@ -606,12 +609,12 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 6: REVIEW SUBMISSIONS                                  -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="review-submissions" class="scroll-mt-24 pb-12 border-b border-gray-100">
-          <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-clipboard-list" class="size-6 text-primary" />
-            <h2 class="text-2xl font-bold text-secondary">Review Submissions</h2>
+        <section id="review-submissions" class="scroll-mt-24 py-14 border-b border-gray-100">
+          <div class="flex items-center gap-2.5 mb-3">
+            <UIcon name="i-lucide-clipboard-list" class="size-5 text-primary shrink-0" />
+            <h2 class="text-xl font-bold text-secondary">Review Submissions</h2>
           </div>
-          <p class="text-gray-500 text-sm mb-8">Where to find and manage patient responses</p>
+          <p class="text-gray-500 text-sm leading-relaxed mb-6">Where to find and manage patient responses</p>
 
           <div class="space-y-4 mb-8">
             <UCard>
@@ -666,12 +669,12 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 7: DATA MANAGEMENT                                     -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="data-management" class="scroll-mt-24 pb-12 border-b border-gray-100">
-          <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-database" class="size-6 text-primary" />
-            <h2 class="text-2xl font-bold text-secondary">Data Management</h2>
+        <section id="data-management" class="scroll-mt-24 py-14 border-b border-gray-100">
+          <div class="flex items-center gap-2.5 mb-3">
+            <UIcon name="i-lucide-database" class="size-5 text-primary shrink-0" />
+            <h2 class="text-xl font-bold text-secondary">Data Management</h2>
           </div>
-          <p class="text-gray-500 text-sm mb-8">Directus collections and their relationships</p>
+          <p class="text-gray-500 text-sm leading-relaxed mb-6">Directus collections and their relationships</p>
 
           <!-- Relationship diagram -->
           <UCard class="mb-8">
@@ -740,12 +743,12 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 8: ARCHITECTURE                                        -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="architecture" class="scroll-mt-24 pb-12 border-b border-gray-100">
-          <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-workflow" class="size-6 text-primary" />
-            <h2 class="text-2xl font-bold text-secondary">Architecture</h2>
+        <section id="architecture" class="scroll-mt-24 py-14 border-b border-gray-100">
+          <div class="flex items-center gap-2.5 mb-3">
+            <UIcon name="i-lucide-workflow" class="size-5 text-primary shrink-0" />
+            <h2 class="text-xl font-bold text-secondary">Architecture</h2>
           </div>
-          <p class="text-gray-500 text-sm mb-8">Full technical flow from form creation to PDF evidence</p>
+          <p class="text-gray-500 text-sm leading-relaxed mb-6">Full technical flow from form creation to PDF evidence</p>
 
           <UCard class="mb-8">
             <p class="font-semibold text-secondary mb-6">End-to-end submission flow</p>
@@ -805,26 +808,28 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 9: FAQ                                                 -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="faq" class="scroll-mt-24">
-          <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-help-circle" class="size-6 text-primary" />
-            <h2 class="text-2xl font-bold text-secondary">FAQ & Troubleshooting</h2>
+        <section id="faq" class="scroll-mt-24 py-14">
+          <div class="flex items-center gap-2.5 mb-3">
+            <UIcon name="i-lucide-help-circle" class="size-5 text-primary shrink-0" />
+            <h2 class="text-xl font-bold text-secondary">FAQ & Troubleshooting</h2>
           </div>
-          <p class="text-gray-500 text-sm mb-8">Common questions and how to solve them</p>
+          <p class="text-gray-500 text-sm leading-relaxed mb-6">Common questions and how to solve them</p>
 
           <UAccordion :items="faqItems" class="space-y-2" />
         </section>
 
         <!-- Footer -->
-        <div class="border-t border-gray-200 pt-8 pb-4 text-center">
-          <p class="text-sm text-gray-400">
-            HealthyStart Group Forms System · Powered by
-            <a href="https://zunamicorp.com" target="_blank" rel="noopener" class="text-primary hover:underline">ZunamiCorp</a>
+        <div class="border-t border-gray-100 py-10 text-center">
+          <Logo variant="dark" class="h-5 w-auto mx-auto mb-3 opacity-30" />
+          <p class="text-xs text-gray-400">
+            HealthyStart Group Forms System ·
+            Powered by <a href="https://zunamicorp.com" target="_blank" rel="noopener" class="text-primary hover:underline">ZunamiCorp</a>
           </p>
         </div>
 
-        </div>
-      </main>
+          </div>
+        </main>
+      </div>
     </div>
 
   </div>
