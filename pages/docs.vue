@@ -190,6 +190,22 @@ const directusLinks = [
   { label: 'Flows & Automation', url: 'https://directus.io/docs/guides/flows',                          icon: 'i-lucide-zap' },
 ]
 
+// ─── Active forms (fetched from Directus) ────────────────────────────────
+const activeForms = ref([])
+
+const { $directus, $readItems } = useNuxtApp()
+const config = useRuntimeConfig()
+
+try {
+  activeForms.value = await $directus.request(
+    $readItems('forms', {
+      fields: ['id', 'title'],
+      filter: { status: { _eq: 'published' } },
+      sort: ['title'],
+    })
+  )
+} catch { /* silently skip if unauthenticated */ }
+
 // ─── Scroll-spy ────────────────────────────────────────────────────────────
 const activeSection  = ref('overview')
 const mobileMenuOpen = ref(false)
@@ -902,6 +918,28 @@ const scrollTo = (id) => {
                        class="flex items-center gap-2 text-[13px] text-secondary hover:text-primary transition-colors">
                       <UIcon name="i-lucide-globe" class="size-3.5 text-gray-400 shrink-0" />
                       Forms Site
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Active Forms -->
+                <div v-if="activeForms.length" class="rounded-xl border border-gray-200 bg-white p-4">
+                  <div class="flex items-center justify-between mb-3">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Active Forms</p>
+                    <UBadge :label="`${activeForms.length}`" color="primary" variant="soft" size="xs" />
+                  </div>
+                  <div class="space-y-1.5">
+                    <a
+                      v-for="form in activeForms"
+                      :key="form.id"
+                      :href="`${config.public.baseUrl}/forms/${form.id}`"
+                      target="_blank"
+                      rel="noopener"
+                      class="flex items-center gap-2 text-[12px] text-gray-600 hover:text-primary transition-colors group"
+                    >
+                      <UIcon name="i-lucide-file-text" class="size-3 text-gray-300 group-hover:text-primary/60 shrink-0 transition-colors" />
+                      <span class="flex-1 leading-snug">{{ form.title }}</span>
+                      <UIcon name="i-lucide-arrow-up-right" class="size-2.5 text-gray-300 group-hover:text-primary/40 shrink-0 transition-colors" />
                     </a>
                   </div>
                 </div>
