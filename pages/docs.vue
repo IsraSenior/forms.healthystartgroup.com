@@ -223,6 +223,9 @@ onMounted(() => {
     const el = document.getElementById(s.id)
     if (el) observer.observe(el)
   })
+  // observe resources section (mobile only anchor)
+  const resourcesEl = document.getElementById('resources')
+  if (resourcesEl) observer.observe(resourcesEl)
 })
 
 const scrollTo = (id) => {
@@ -244,32 +247,55 @@ const scrollTo = (id) => {
       <!-- ── MOBILE SLIDEOVER ────────────────────────────────────────────── -->
       <USlideover v-model:open="mobileMenuOpen" side="left">
         <template #content>
-          <div class="flex flex-col h-full bg-white">
-            <div class="px-5 py-5 border-b border-gray-100">
-              <Logo variant="dark" class="h-8 w-auto" />
-              <p class="text-[11px] text-gray-400 mt-2 font-medium tracking-wide">Forms System — Docs</p>
+          <div class="flex flex-col h-full bg-secondary">
+            <div class="shrink-0 px-5 py-5 border-b border-white/10">
+              <Logo class="h-8 w-auto" />
+              <p class="text-[11px] text-white mt-2 font-medium tracking-wide">Forms System — Docs</p>
             </div>
             <nav class="flex-1 overflow-y-auto py-5 px-3">
               <div v-for="group in navGroups" :key="group.label" class="mb-5">
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-1.5">{{ group.label }}</p>
+                <p class="text-[10px] font-bold text-white uppercase tracking-widest px-3 mb-1.5">{{ group.label }}</p>
                 <div class="space-y-px">
                   <button
                     v-for="item in group.items"
                     :key="item.id"
                     @click="scrollTo(item.id)"
                     :class="[
-                      'w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all',
+                      'w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150',
                       activeSection === item.id
-                        ? 'text-primary bg-primary/8 font-semibold'
-                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                        ? 'text-white bg-white/15 font-semibold'
+                        : 'text-white hover:bg-white/10'
                     ]"
                   >
-                    <UIcon :name="item.icon" :class="['size-3.5 shrink-0', activeSection === item.id ? 'text-primary' : 'text-gray-400']" />
+                    <UIcon :name="item.icon" :class="['size-3.5 shrink-0', activeSection === item.id ? 'text-primary' : 'text-white']" />
                     {{ item.label }}
                   </button>
                 </div>
               </div>
+              <!-- Resources link (mobile only) -->
+              <div class="mt-2 pt-4 border-t border-white/10">
+                <p class="text-[10px] font-bold text-white uppercase tracking-widest px-3 mb-1.5">More</p>
+                <button
+                  @click="scrollTo('resources')"
+                  :class="[
+                    'w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150',
+                    activeSection === 'resources'
+                      ? 'text-white bg-white/15 font-semibold'
+                      : 'text-white hover:bg-white/10'
+                  ]"
+                >
+                  <UIcon name="i-lucide-layout-panel-left" class="size-3.5 shrink-0 text-white" />
+                  Resources & Links
+                </button>
+              </div>
             </nav>
+            <div class="shrink-0 border-t border-white/10 px-5 py-4">
+              <p class="text-[10px] text-white leading-relaxed">
+                Powered by
+                <a href="https://www.zunamicorp.com" target="_blank" rel="noopener"
+                   class="font-semibold text-white transition-colors">ZunamiCorp</a>
+              </p>
+            </div>
           </div>
         </template>
       </USlideover>
@@ -899,6 +925,90 @@ const scrollTo = (id) => {
           <p class="text-gray-500 text-sm leading-relaxed mb-6">Common questions and how to solve them</p>
 
           <UAccordion :items="faqItems" class="space-y-2" />
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- SECTION MOBILE: RESOURCES (visible only < xl)                  -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section id="resources" class="scroll-mt-4 xl:hidden py-14 border-b border-gray-100">
+          <div class="flex items-center gap-2.5 mb-3">
+            <UIcon name="i-lucide-layout-panel-left" class="size-5 text-primary shrink-0" />
+            <h2 class="text-xl font-bold text-secondary">Resources & Links</h2>
+          </div>
+          <p class="text-gray-500 text-sm leading-relaxed mb-8">Quick access, active forms, and external documentation</p>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+
+            <!-- Quick Access -->
+            <div class="rounded-xl border border-gray-200 bg-white p-4">
+              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Quick Access</p>
+              <div class="space-y-2.5">
+                <a href="https://admin.healthystartgroup.com" target="_blank" rel="noopener"
+                   class="flex items-center gap-2 text-[13px] text-secondary hover:text-primary transition-colors">
+                  <UIcon name="i-lucide-layout-dashboard" class="size-3.5 text-gray-400 shrink-0" />
+                  Directus Admin
+                </a>
+                <a href="https://forms.healthystartgroup.com" target="_blank" rel="noopener"
+                   class="flex items-center gap-2 text-[13px] text-secondary hover:text-primary transition-colors">
+                  <UIcon name="i-lucide-globe" class="size-3.5 text-gray-400 shrink-0" />
+                  Forms Site
+                </a>
+              </div>
+            </div>
+
+            <!-- Active Forms -->
+            <div v-if="activeForms.length" class="rounded-xl border border-gray-200 bg-white p-4">
+              <div class="flex items-center justify-between mb-3">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Active Forms</p>
+                <UBadge :label="`${activeForms.length}`" color="primary" variant="soft" size="xs" />
+              </div>
+              <div class="space-y-1.5">
+                <a
+                  v-for="form in activeForms"
+                  :key="form.id"
+                  :href="`${config.public.baseUrl}/forms/${form.id}`"
+                  target="_blank"
+                  rel="noopener"
+                  class="flex items-center gap-2 text-[12px] text-gray-600 hover:text-primary transition-colors group"
+                >
+                  <UIcon name="i-lucide-file-text" class="size-3 text-gray-300 group-hover:text-primary/60 shrink-0 transition-colors" />
+                  <span class="flex-1 leading-snug">{{ form.title }}</span>
+                  <UIcon name="i-lucide-arrow-up-right" class="size-2.5 text-gray-300 group-hover:text-primary/40 shrink-0 transition-colors" />
+                </a>
+              </div>
+            </div>
+
+            <!-- Directus Docs -->
+            <div class="rounded-xl border border-gray-200 bg-white p-4">
+              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Directus Docs</p>
+              <div class="space-y-1.5">
+                <a
+                  v-for="link in directusLinks"
+                  :key="link.url"
+                  :href="link.url"
+                  target="_blank"
+                  rel="noopener"
+                  class="flex items-center gap-2 text-[12px] text-gray-500 hover:text-primary transition-colors group"
+                >
+                  <UIcon :name="link.icon" class="size-3 text-gray-300 group-hover:text-primary/60 shrink-0 transition-colors" />
+                  {{ link.label }}
+                  <UIcon name="i-lucide-arrow-up-right" class="size-2.5 ml-auto text-gray-300 group-hover:text-primary/40 shrink-0 transition-colors" />
+                </a>
+              </div>
+            </div>
+
+            <!-- Key Reminders -->
+            <div class="rounded-xl border border-primary/20 bg-primary/5 p-4">
+              <p class="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-3">Key Reminders</p>
+              <ul class="space-y-2">
+                <li v-for="tip in quickTips" :key="tip" class="flex items-start gap-2">
+                  <UIcon name="i-lucide-check" class="size-3 text-primary mt-0.5 shrink-0" />
+                  <span class="text-[12px] text-gray-600 leading-relaxed">{{ tip }}</span>
+                </li>
+              </ul>
+            </div>
+
+          </div>
         </section>
 
         <!-- Footer -->
