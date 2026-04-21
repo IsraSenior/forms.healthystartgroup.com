@@ -1,18 +1,41 @@
 <script setup>
 useHead({ title: 'Documentation — HSG Forms' })
 
-// ─── Navigation sections ───────────────────────────────────────────────────
-const sections = [
-  { id: 'overview',            label: 'Overview',              icon: 'i-lucide-info' },
-  { id: 'create-form',         label: 'Create a Form',         icon: 'i-lucide-plus-circle' },
-  { id: 'field-types',         label: 'Field Types',           icon: 'i-lucide-text-cursor-input' },
-  { id: 'configure-options',   label: 'Configure Options',     icon: 'i-lucide-settings-2' },
-  { id: 'publish-share',       label: 'Publish & Share',       icon: 'i-lucide-share-2' },
-  { id: 'review-submissions',  label: 'Review Submissions',    icon: 'i-lucide-clipboard-list' },
-  { id: 'data-management',     label: 'Data Management',       icon: 'i-lucide-database' },
-  { id: 'architecture',        label: 'Architecture',          icon: 'i-lucide-workflow' },
-  { id: 'faq',                 label: 'FAQ',                   icon: 'i-lucide-help-circle' },
+// ─── Navigation groups ────────────────────────────────────────────────────
+const navGroups = [
+  {
+    label: 'Getting Started',
+    items: [
+      { id: 'overview', label: 'Overview', icon: 'i-lucide-info' },
+    ],
+  },
+  {
+    label: 'Building Forms',
+    items: [
+      { id: 'create-form',       label: 'Create a Form',      icon: 'i-lucide-plus-circle' },
+      { id: 'field-types',       label: 'Field Types',        icon: 'i-lucide-text-cursor-input' },
+      { id: 'configure-options', label: 'Configure Options',  icon: 'i-lucide-settings-2' },
+      { id: 'publish-share',     label: 'Publish & Share',    icon: 'i-lucide-share-2' },
+    ],
+  },
+  {
+    label: 'Managing Data',
+    items: [
+      { id: 'review-submissions', label: 'Review Submissions', icon: 'i-lucide-clipboard-list' },
+      { id: 'data-management',    label: 'Data Management',    icon: 'i-lucide-database' },
+    ],
+  },
+  {
+    label: 'Reference',
+    items: [
+      { id: 'architecture', label: 'Architecture', icon: 'i-lucide-workflow' },
+      { id: 'faq',          label: 'FAQ',          icon: 'i-lucide-help-circle' },
+    ],
+  },
 ]
+
+// Flat list derivado para el IntersectionObserver
+const sections = navGroups.flatMap(g => g.items)
 
 // ─── Field types reference ─────────────────────────────────────────────────
 const fieldTypes = [
@@ -182,28 +205,32 @@ const scrollTo = (id) => {
       <!-- ── MOBILE SLIDEOVER ────────────────────────────────────────────── -->
       <USlideover v-model:open="mobileMenuOpen" side="left">
         <template #content>
-          <div class="flex flex-col h-full">
-            <div class="px-5 pt-6 pb-4 border-b border-gray-100">
-              <Logo variant="dark" class="h-6 w-auto" />
+          <div class="flex flex-col h-full bg-white">
+            <div class="px-5 py-5 border-b border-gray-100">
+              <Logo variant="dark" class="h-8 w-auto" />
+              <p class="text-[11px] text-gray-400 mt-2 font-medium tracking-wide">Forms System — Docs</p>
             </div>
-            <div class="flex-1 overflow-y-auto px-4 py-5">
-              <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3 px-2">On this page</p>
-              <nav class="space-y-px">
-                <button
-                  v-for="section in sections"
-                  :key="section.id"
-                  @click="scrollTo(section.id)"
-                  :class="[
-                    'w-full text-left px-3 py-2 rounded-lg text-[13px] font-medium transition-colors',
-                    activeSection === section.id
-                      ? 'text-primary bg-primary/5 font-semibold'
-                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                  ]"
-                >
-                  {{ section.label }}
-                </button>
-              </nav>
-            </div>
+            <nav class="flex-1 overflow-y-auto py-5 px-3">
+              <div v-for="group in navGroups" :key="group.label" class="mb-5">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-1.5">{{ group.label }}</p>
+                <div class="space-y-px">
+                  <button
+                    v-for="item in group.items"
+                    :key="item.id"
+                    @click="scrollTo(item.id)"
+                    :class="[
+                      'w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all',
+                      activeSection === item.id
+                        ? 'text-primary bg-primary/8 font-semibold'
+                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                    ]"
+                  >
+                    <UIcon :name="item.icon" :class="['size-3.5 shrink-0', activeSection === item.id ? 'text-primary' : 'text-gray-400']" />
+                    {{ item.label }}
+                  </button>
+                </div>
+              </div>
+            </nav>
           </div>
         </template>
       </USlideover>
@@ -212,32 +239,43 @@ const scrollTo = (id) => {
       <div class="flex min-h-[calc(100vh-3.5rem)]">
 
         <!-- Sidebar — desktop ─────────────────────────────────────────── -->
-        <aside class="hidden lg:flex flex-col fixed top-0 left-0 w-60 h-screen border-r border-gray-200 bg-white">
-          <div class="flex-1 overflow-y-auto py-8 px-4">
-            <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-4 px-2">On this page</p>
-            <nav class="space-y-px">
-              <button
-                v-for="section in sections"
-                :key="section.id"
-                @click="scrollTo(section.id)"
-                :class="[
-                  'w-full text-left px-3 py-2 rounded-lg text-[13px] font-medium transition-colors',
-                  activeSection === section.id
-                    ? 'text-primary bg-primary/5 font-semibold'
-                    : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                ]"
-              >
-                {{ section.label }}
-              </button>
-            </nav>
+        <aside class="hidden lg:flex flex-col fixed top-0 left-0 w-64 h-screen border-r border-gray-100 bg-white">
+
+          <!-- Logo header -->
+          <div class="shrink-0 px-5 py-5 border-b border-gray-100">
+            <Logo variant="dark" class="h-8 w-auto" />
+            <p class="text-[11px] text-gray-400 mt-2 font-medium tracking-wide">Forms System — Docs</p>
           </div>
-          <div class="shrink-0 border-t border-gray-100 p-5">
-            <Logo variant="dark" class="h-5 w-auto opacity-30" />
-          </div>
+
+          <!-- Nav -->
+          <nav class="flex-1 overflow-y-auto py-5 px-3">
+            <div v-for="group in navGroups" :key="group.label" class="mb-5">
+              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-1.5">
+                {{ group.label }}
+              </p>
+              <div class="space-y-px">
+                <button
+                  v-for="item in group.items"
+                  :key="item.id"
+                  @click="scrollTo(item.id)"
+                  :class="[
+                    'w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150',
+                    activeSection === item.id
+                      ? 'text-primary bg-primary/8 font-semibold'
+                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                  ]"
+                >
+                  <UIcon :name="item.icon" :class="['size-3.5 shrink-0', activeSection === item.id ? 'text-primary' : 'text-gray-400']" />
+                  {{ item.label }}
+                </button>
+              </div>
+            </div>
+          </nav>
+
         </aside>
 
         <!-- ── MAIN CONTENT ─────────────────────────────────────────────── -->
-        <main class="flex-1 min-w-0 lg:pl-60">
+        <main class="flex-1 min-w-0 lg:pl-64">
           <div class="max-w-[756px] mx-auto px-6 sm:px-10">
 
         <!-- ═══════════════════════════════════════════════════════════════ -->
