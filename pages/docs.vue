@@ -172,20 +172,10 @@ const scrollTo = (id) => {
 <template>
   <div class="min-h-screen bg-[#F8FAFC]">
 
-    <!-- ── HEADER ───────────────────────────────────────────────────────── -->
-    <header class="fixed top-0 inset-x-0 z-50 h-14 bg-white/90 backdrop-blur-lg border-b border-gray-200">
-      <div class="h-full max-w-screen-xl mx-auto px-5 sm:px-8 flex items-center gap-3">
-        <Logo variant="dark" class="h-7 w-auto shrink-0" />
-        <div class="w-px h-5 bg-gray-200 shrink-0" />
-        <span class="text-sm font-semibold text-secondary tracking-wide">Documentation</span>
-      </div>
-    </header>
-
-    <!-- ── BODY: empuja todo el contenido debajo del header fijo ─────────── -->
-    <div class="pt-14">
+    <div>
 
       <!-- ── MOBILE NAV BAR ──────────────────────────────────────────────── -->
-      <div class="lg:hidden sticky top-14 z-40 h-10 bg-white/90 backdrop-blur border-b border-gray-200 flex items-center gap-2 px-5">
+      <div class="lg:hidden sticky top-0 z-40 h-10 bg-white/90 backdrop-blur border-b border-gray-200 flex items-center gap-2 px-5">
         <UButton variant="ghost" color="neutral" icon="i-lucide-menu" label="Navigation" size="xs" @click="mobileMenuOpen = true" />
       </div>
 
@@ -222,7 +212,7 @@ const scrollTo = (id) => {
       <div class="flex min-h-[calc(100vh-3.5rem)]">
 
         <!-- Sidebar — desktop ─────────────────────────────────────────── -->
-        <aside class="hidden lg:flex flex-col fixed top-14 left-0 w-60 h-[calc(100vh-3.5rem)] border-r border-gray-200 bg-white">
+        <aside class="hidden lg:flex flex-col fixed top-0 left-0 w-60 h-screen border-r border-gray-200 bg-white">
           <div class="flex-1 overflow-y-auto py-8 px-4">
             <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-4 px-2">On this page</p>
             <nav class="space-y-px">
@@ -253,7 +243,7 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 1: OVERVIEW                                            -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="overview" class="scroll-mt-24 py-14 border-b border-gray-100">
+        <section id="overview" class="scroll-mt-4 py-14 border-b border-gray-100">
           <div class="flex items-center gap-2.5 mb-3">
             <UIcon name="i-lucide-info" class="size-5 text-primary shrink-0" />
             <h1 class="text-xl font-bold text-secondary">Overview</h1>
@@ -330,7 +320,7 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 2: CREATE A FORM                                       -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="create-form" class="scroll-mt-24 py-14 border-b border-gray-100">
+        <section id="create-form" class="scroll-mt-4 py-14 border-b border-gray-100">
           <div class="flex items-center gap-2.5 mb-3">
             <UIcon name="i-lucide-plus-circle" class="size-5 text-primary shrink-0" />
             <h2 class="text-xl font-bold text-secondary">Create a Form</h2>
@@ -365,7 +355,7 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 3: FIELD TYPES                                         -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="field-types" class="scroll-mt-24 py-14 border-b border-gray-100">
+        <section id="field-types" class="scroll-mt-4 py-14 border-b border-gray-100">
           <div class="flex items-center gap-2.5 mb-3">
             <UIcon name="i-lucide-text-cursor-input" class="size-5 text-primary shrink-0" />
             <h2 class="text-xl font-bold text-secondary">Field Types</h2>
@@ -481,7 +471,7 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 4: CONFIGURE OPTIONS                                   -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="configure-options" class="scroll-mt-24 py-14 border-b border-gray-100">
+        <section id="configure-options" class="scroll-mt-4 py-14 border-b border-gray-100">
           <div class="flex items-center gap-2.5 mb-3">
             <UIcon name="i-lucide-settings-2" class="size-5 text-primary shrink-0" />
             <h2 class="text-xl font-bold text-secondary">Configure Options</h2>
@@ -545,7 +535,7 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 5: PUBLISH & SHARE                                     -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="publish-share" class="scroll-mt-24 py-14 border-b border-gray-100">
+        <section id="publish-share" class="scroll-mt-4 py-14 border-b border-gray-100">
           <div class="flex items-center gap-2.5 mb-3">
             <UIcon name="i-lucide-share-2" class="size-5 text-primary shrink-0" />
             <h2 class="text-xl font-bold text-secondary">Publish & Share</h2>
@@ -611,7 +601,7 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 6: REVIEW SUBMISSIONS                                  -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="review-submissions" class="scroll-mt-24 py-14 border-b border-gray-100">
+        <section id="review-submissions" class="scroll-mt-4 py-14 border-b border-gray-100">
           <div class="flex items-center gap-2.5 mb-3">
             <UIcon name="i-lucide-clipboard-list" class="size-5 text-primary shrink-0" />
             <h2 class="text-xl font-bold text-secondary">Review Submissions</h2>
@@ -671,7 +661,7 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 7: DATA MANAGEMENT                                     -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="data-management" class="scroll-mt-24 py-14 border-b border-gray-100">
+        <section id="data-management" class="scroll-mt-4 py-14 border-b border-gray-100">
           <div class="flex items-center gap-2.5 mb-3">
             <UIcon name="i-lucide-database" class="size-5 text-primary shrink-0" />
             <h2 class="text-xl font-bold text-secondary">Data Management</h2>
@@ -745,7 +735,7 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 8: ARCHITECTURE                                        -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="architecture" class="scroll-mt-24 py-14 border-b border-gray-100">
+        <section id="architecture" class="scroll-mt-4 py-14 border-b border-gray-100">
           <div class="flex items-center gap-2.5 mb-3">
             <UIcon name="i-lucide-workflow" class="size-5 text-primary shrink-0" />
             <h2 class="text-xl font-bold text-secondary">Architecture</h2>
@@ -810,7 +800,7 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 9: FAQ                                                 -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="faq" class="scroll-mt-24 py-14">
+        <section id="faq" class="scroll-mt-4 py-14">
           <div class="flex items-center gap-2.5 mb-3">
             <UIcon name="i-lucide-help-circle" class="size-5 text-primary shrink-0" />
             <h2 class="text-xl font-bold text-secondary">FAQ & Troubleshooting</h2>
