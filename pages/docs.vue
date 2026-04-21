@@ -145,7 +145,8 @@ const createFormSteps = [
 ]
 
 // ─── Scroll-spy ────────────────────────────────────────────────────────────
-const activeSection   = ref('overview')
+const activeSection  = ref('overview')
+const mobileMenuOpen = ref(false)
 
 onMounted(() => {
   const observer = new IntersectionObserver(
@@ -154,7 +155,7 @@ onMounted(() => {
         if (entry.isIntersecting) activeSection.value = entry.target.id
       })
     },
-    { rootMargin: '-80px 0px -65% 0px', threshold: 0 }
+    { rootMargin: '-56px 0px -65% 0px', threshold: 0 }
   )
   sections.forEach((s) => {
     const el = document.getElementById(s.id)
@@ -163,6 +164,7 @@ onMounted(() => {
 })
 
 const scrollTo = (id) => {
+  mobileMenuOpen.value = false
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 </script>
@@ -171,59 +173,85 @@ const scrollTo = (id) => {
   <div class="min-h-screen bg-gray-50">
 
     <!-- ── HEADER ───────────────────────────────────────────────────────── -->
-    <header class="fixed top-0 left-0 right-0 z-50 h-16 bg-white border-b border-gray-200 shadow-sm">
-      <div class="flex items-center justify-between h-full px-4 sm:px-6 max-w-screen-2xl mx-auto">
+    <header class="fixed top-0 left-0 right-0 z-50 h-14 bg-white/80 backdrop-blur-lg border-b border-gray-200">
+      <div class="flex items-center justify-between h-full px-4 sm:px-6 max-w-screen-xl mx-auto">
         <div class="flex items-center gap-3">
-          <Logo class="h-9 w-auto" />
-          <span class="hidden sm:block text-secondary font-semibold text-lg border-l border-gray-200 pl-3 ml-1">
-            Documentation
-          </span>
+          <Logo variant="dark" class="h-8 w-auto" />
+          <div class="hidden sm:block w-px h-6 bg-gray-200" />
+          <span class="hidden sm:block text-secondary font-semibold text-base">Documentation</span>
         </div>
         <UButton
           variant="ghost"
-          color="secondary"
+          color="neutral"
           icon="i-lucide-arrow-left"
           to="/"
           label="Back"
+          size="sm"
         />
       </div>
     </header>
 
-    <!-- ── BODY (sidebar + content) ─────────────────────────────────────── -->
-    <div class="flex pt-16 min-h-screen">
+    <!-- ── MOBILE NAV BAR ────────────────────────────────────────────────── -->
+    <div class="lg:hidden sticky top-14 z-40 h-10 bg-white/80 backdrop-blur-lg border-b border-gray-200 flex items-center px-4">
+      <UButton variant="ghost" color="neutral" icon="i-lucide-menu" label="Menu" size="xs" @click="mobileMenuOpen = true" />
+    </div>
 
-      <!-- Sidebar — desktop ───────────────────────────────────────────── -->
-      <aside class="hidden lg:flex flex-col w-64 shrink-0 fixed top-16 left-0 h-[calc(100vh-4rem)] overflow-y-auto bg-white border-r border-gray-200 py-6 px-3">
-        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-3">Contents</p>
+    <!-- ── MOBILE SLIDEOVER ──────────────────────────────────────────────── -->
+    <USlideover v-model:open="mobileMenuOpen" side="left">
+      <div class="p-5">
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Contents</p>
         <nav class="space-y-0.5">
           <button
             v-for="section in sections"
             :key="section.id"
             @click="scrollTo(section.id)"
             :class="[
-              'w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left',
+              'w-full text-left px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors',
               activeSection === section.id
-                ? 'bg-primary/10 text-primary'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-secondary'
+                ? 'text-primary bg-primary/5 font-semibold'
+                : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
             ]"
           >
-            <UIcon :name="section.icon" class="size-4 shrink-0" />
+            {{ section.label }}
+          </button>
+        </nav>
+      </div>
+    </USlideover>
+
+    <!-- ── BODY ──────────────────────────────────────────────────────────── -->
+    <div class="flex">
+
+      <!-- Sidebar — desktop ───────────────────────────────────────────── -->
+      <aside class="hidden lg:block fixed top-14 left-0 w-56 h-[calc(100vh-3.5rem)] overflow-y-auto border-r border-gray-200 bg-white py-6 px-4">
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Contents</p>
+        <nav class="space-y-0.5">
+          <button
+            v-for="section in sections"
+            :key="section.id"
+            @click="scrollTo(section.id)"
+            :class="[
+              'w-full text-left px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors',
+              activeSection === section.id
+                ? 'text-primary bg-primary/5 font-semibold'
+                : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+            ]"
+          >
             {{ section.label }}
           </button>
         </nav>
       </aside>
 
       <!-- ── MAIN CONTENT ───────────────────────────────────────────────── -->
-      <main class="flex-1 min-w-0 lg:ml-64 px-4 sm:px-8 py-10">
-        <div class="max-w-4xl mx-auto space-y-20">
+      <main class="lg:pl-56 pt-14 w-full">
+        <div class="max-w-3xl mx-auto px-4 sm:px-8 py-12 space-y-16">
 
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 1: OVERVIEW                                            -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="overview">
+        <section id="overview" class="scroll-mt-24 pb-12 border-b border-gray-100">
           <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-info" class="size-7 text-primary" />
-            <h1 class="text-3xl font-bold text-secondary">Overview</h1>
+            <UIcon name="i-lucide-info" class="size-6 text-primary" />
+            <h1 class="text-2xl font-bold text-secondary">Overview</h1>
           </div>
           <p class="text-gray-500 text-sm mb-8">What this system is and how it works</p>
 
@@ -297,10 +325,10 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 2: CREATE A FORM                                       -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="create-form">
+        <section id="create-form" class="scroll-mt-24 pb-12 border-b border-gray-100">
           <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-plus-circle" class="size-7 text-primary" />
-            <h2 class="text-3xl font-bold text-secondary">Create a Form</h2>
+            <UIcon name="i-lucide-plus-circle" class="size-6 text-primary" />
+            <h2 class="text-2xl font-bold text-secondary">Create a Form</h2>
           </div>
           <p class="text-gray-500 text-sm mb-8">Step-by-step guide to building a new form in Directus</p>
 
@@ -332,10 +360,10 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 3: FIELD TYPES                                         -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="field-types">
+        <section id="field-types" class="scroll-mt-24 pb-12 border-b border-gray-100">
           <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-text-cursor-input" class="size-7 text-primary" />
-            <h2 class="text-3xl font-bold text-secondary">Field Types</h2>
+            <UIcon name="i-lucide-text-cursor-input" class="size-6 text-primary" />
+            <h2 class="text-2xl font-bold text-secondary">Field Types</h2>
           </div>
           <p class="text-gray-500 text-sm mb-8">9 types available — the preview shows exactly what patients see</p>
 
@@ -448,10 +476,10 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 4: CONFIGURE OPTIONS                                   -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="configure-options">
+        <section id="configure-options" class="scroll-mt-24 pb-12 border-b border-gray-100">
           <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-settings-2" class="size-7 text-primary" />
-            <h2 class="text-3xl font-bold text-secondary">Configure Options</h2>
+            <UIcon name="i-lucide-settings-2" class="size-6 text-primary" />
+            <h2 class="text-2xl font-bold text-secondary">Configure Options</h2>
           </div>
           <p class="text-gray-500 text-sm mb-8">For <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">select</code>, <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">radio</code>, and <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">checkbox</code> field types</p>
 
@@ -512,10 +540,10 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 5: PUBLISH & SHARE                                     -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="publish-share">
+        <section id="publish-share" class="scroll-mt-24 pb-12 border-b border-gray-100">
           <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-share-2" class="size-7 text-primary" />
-            <h2 class="text-3xl font-bold text-secondary">Publish & Share</h2>
+            <UIcon name="i-lucide-share-2" class="size-6 text-primary" />
+            <h2 class="text-2xl font-bold text-secondary">Publish & Share</h2>
           </div>
           <p class="text-gray-500 text-sm mb-8">Make a form accessible to patients</p>
 
@@ -578,10 +606,10 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 6: REVIEW SUBMISSIONS                                  -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="review-submissions">
+        <section id="review-submissions" class="scroll-mt-24 pb-12 border-b border-gray-100">
           <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-clipboard-list" class="size-7 text-primary" />
-            <h2 class="text-3xl font-bold text-secondary">Review Submissions</h2>
+            <UIcon name="i-lucide-clipboard-list" class="size-6 text-primary" />
+            <h2 class="text-2xl font-bold text-secondary">Review Submissions</h2>
           </div>
           <p class="text-gray-500 text-sm mb-8">Where to find and manage patient responses</p>
 
@@ -638,10 +666,10 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 7: DATA MANAGEMENT                                     -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="data-management">
+        <section id="data-management" class="scroll-mt-24 pb-12 border-b border-gray-100">
           <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-database" class="size-7 text-primary" />
-            <h2 class="text-3xl font-bold text-secondary">Data Management</h2>
+            <UIcon name="i-lucide-database" class="size-6 text-primary" />
+            <h2 class="text-2xl font-bold text-secondary">Data Management</h2>
           </div>
           <p class="text-gray-500 text-sm mb-8">Directus collections and their relationships</p>
 
@@ -712,10 +740,10 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 8: ARCHITECTURE                                        -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="architecture">
+        <section id="architecture" class="scroll-mt-24 pb-12 border-b border-gray-100">
           <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-workflow" class="size-7 text-primary" />
-            <h2 class="text-3xl font-bold text-secondary">Architecture</h2>
+            <UIcon name="i-lucide-workflow" class="size-6 text-primary" />
+            <h2 class="text-2xl font-bold text-secondary">Architecture</h2>
           </div>
           <p class="text-gray-500 text-sm mb-8">Full technical flow from form creation to PDF evidence</p>
 
@@ -777,10 +805,10 @@ const scrollTo = (id) => {
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <!-- SECTION 9: FAQ                                                 -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
-        <section id="faq">
+        <section id="faq" class="scroll-mt-24">
           <div class="flex items-center gap-3 mb-2">
-            <UIcon name="i-lucide-help-circle" class="size-7 text-primary" />
-            <h2 class="text-3xl font-bold text-secondary">FAQ & Troubleshooting</h2>
+            <UIcon name="i-lucide-help-circle" class="size-6 text-primary" />
+            <h2 class="text-2xl font-bold text-secondary">FAQ & Troubleshooting</h2>
           </div>
           <p class="text-gray-500 text-sm mb-8">Common questions and how to solve them</p>
 
