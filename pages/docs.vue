@@ -94,6 +94,26 @@ function scrollTo(id) {
   mobileMenuOpen.value = false
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
+
+// ─── PDF download ─────────────────────────────────────────────────────────
+const downloadingPdf = ref(false)
+
+async function downloadPdf() {
+  if (downloadingPdf.value) return
+  downloadingPdf.value = true
+  try {
+    const res  = await fetch('/api/docs-pdf')
+    const blob = await res.blob()
+    const url  = URL.createObjectURL(blob)
+    const a    = document.createElement('a')
+    a.href     = url
+    a.download = 'hsg-forms-documentation.pdf'
+    a.click()
+    URL.revokeObjectURL(url)
+  } finally {
+    downloadingPdf.value = false
+  }
+}
 </script>
 
 <template>
@@ -152,8 +172,28 @@ function scrollTo(id) {
               </button>
             </div>
           </nav>
+          <!-- Download button — just above the divider -->
+          <div class="shrink-0 px-3 pb-3">
+            <button
+              :disabled="downloadingPdf"
+              @click="downloadPdf"
+              :class="[
+                'flex items-center gap-2 w-full px-3 py-2 rounded-lg text-[12px] font-medium transition-all duration-150',
+                downloadingPdf
+                  ? 'bg-white/5 text-white/40 cursor-not-allowed'
+                  : 'bg-white/10 text-white hover:bg-white/20'
+              ]"
+            >
+              <UIcon
+                :name="downloadingPdf ? 'i-lucide-loader-circle' : 'i-lucide-download'"
+                :class="['size-3.5 shrink-0', downloadingPdf ? 'animate-spin text-white/40' : 'text-primary']"
+              />
+              {{ downloadingPdf ? 'Generating PDF…' : 'Download Documentation' }}
+            </button>
+          </div>
+
           <div class="shrink-0 border-t border-white/10 px-5 py-4">
-            <p class="text-[10px] text-white leading-relaxed">
+            <p class="text-[10px] text-white leading-relaxed px-1">
               Powered by
               <a href="https://www.zunamicorp.com" target="_blank" rel="noopener" class="font-semibold text-white transition-colors">Zunami Corp</a>
             </p>
@@ -202,6 +242,26 @@ function scrollTo(id) {
             </div>
           </div>
         </nav>
+
+        <!-- Download button — just above the divider -->
+        <div class="shrink-0 px-3 pb-3">
+          <button
+            :disabled="downloadingPdf"
+            @click="downloadPdf"
+            :class="[
+              'flex items-center gap-2 w-full px-3 py-2 rounded-lg text-[12px] font-medium transition-all duration-150',
+              downloadingPdf
+                ? 'bg-white/5 text-white/40 cursor-not-allowed'
+                : 'bg-white/10 text-white hover:bg-white/20'
+            ]"
+          >
+            <UIcon
+              :name="downloadingPdf ? 'i-lucide-loader-circle' : 'i-lucide-download'"
+              :class="['size-3.5 shrink-0', downloadingPdf ? 'animate-spin text-white/40' : 'text-primary']"
+            />
+            {{ downloadingPdf ? 'Generating PDF…' : 'Download Documentation' }}
+          </button>
+        </div>
 
         <div class="shrink-0 border-t border-white/10 px-5 py-4">
           <p class="text-[10px] text-white leading-relaxed">
